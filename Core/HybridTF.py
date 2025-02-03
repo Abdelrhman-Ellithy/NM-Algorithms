@@ -96,14 +96,13 @@ dataset=[
          ,(x**2+2*x-7,1,3)
          ]
 tol = 1e-14
-print()
+
 print("Abdelrahman Hybrid HtrisectionFalse")
-print("\t\t\tIter\t\t Root\t\t\t\tFunction Value\t\t\t Lower Bound\t\t\t Upper Bound")
+print("\t\tIter\t\t Root\t\tFunction Value\t\t Lower Bound\t\t Upper Bound")
 for i in range(0,len(dataset)) :    
     f=dataset[i][0]
     f = sp.lambdify('x', f)
     a=dataset[i][1]
     b=dataset[i][2]
     n, x, fx, a, b = HtrisectionFalse(f, a, b, tol)
-    #print(f"problem{i+1}| \t{n} \t {x:.16f} \t {fx:.16f} \t {a:.16f} \t {b:.16f}")
-    print(f"{n}")
+    print(f"problem{i+1}| \t{n} \t {x:.16f} \t {fx:.16f} \t {a:.16f} \t {b:.16f}")
