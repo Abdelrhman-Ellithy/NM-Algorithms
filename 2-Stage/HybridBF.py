@@ -9,44 +9,26 @@ Created on Wed Mar 20 08:54:54 2024
 import sympy as sp
 import time
 def HbisectionFalse(f, a, b, tol, max_iter=100):
-    """
-    Optimized hybrid bisection-false position method with:
-    - 2 function evaluations per iteration (down from 5)
-    - O(1) memory complexity
-    - Early termination checks
-    - Numerical stability safeguards
-    """
     fa, fb = f(a), f(b)
-    
-    # Immediate checks for root at boundaries
-    if abs(fa) <= tol: return 0, a, fa, a, b
-    if abs(fb) <= tol: return 0, b, fb, a, b
-
     for n in range(1, max_iter + 1):
-        # Bisection phase (1 evaluation)
         mid = 0.5 * (a + b)
         fmid = f(mid)
-        
         if abs(fmid) <= tol:
             return n, mid, fmid, a, b
         
-        # Update interval using bisection
         if fa * fmid < 0:
             b, fb = mid, fmid
         else:
             a, fa = mid, fmid
-
-        # False position phase (1 evaluation)
         try:
             dx = (a * fb - b * fa)
             fp = dx / (fb - fa)
         except ZeroDivisionError:
             continue
-
+        
         ffp = f(fp)
         if abs(ffp) <= tol:
             return n, fp, ffp, a, b
-        # Update interval using false position
         if fa * ffp < 0:
             b, fb = fp, ffp
         else:
