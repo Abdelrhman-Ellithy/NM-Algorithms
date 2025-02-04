@@ -97,9 +97,6 @@ def HtrisectionFalseMS(f, a, b, tol, max_iter=100,delta=1e-4):
 
 # Define the symbolic variable x
 x = sp.Symbol('x')
-
-# Define the symbolic variable x
-x = sp.Symbol('x')
 dataset=[
          (x * sp.exp(x) - 7,1,2)
          ,(x**3-x-1,1,2)

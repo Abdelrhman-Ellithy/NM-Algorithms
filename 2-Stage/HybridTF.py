@@ -29,8 +29,9 @@ def HtrisectionFalse(f, a, b, tol, max_iter=100):
     fa, fb = f(a), f(b)
     for n in range(1, max_iter + 1):
         # less +-/
-        x1 = a + (b - a)/3
-        x2 = b - (b - a)/3
+        diff = b - a
+        x1 = a + diff/3
+        x2 = b - diff/3
         fx1, fx2 = f(x1), f(x2)
 
         if abs(fx1) <= tol: return n, x1, fx1, a, b
@@ -49,7 +50,6 @@ def HtrisectionFalse(f, a, b, tol, max_iter=100):
             x = dx / dd
         except ZeroDivisionError:
             continue
-
         fx = f(x)
         if abs(fx) <= tol:
             return n, x, fx, a, b
