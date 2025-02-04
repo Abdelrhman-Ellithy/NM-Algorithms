@@ -23,16 +23,28 @@ jobs:
     - name: Change Directory
       run: cd 'With DB Speed Records'
 
-    - name: Run benchmark script
+    - name: Run benchmark BFMS script
       run: |
-        cd 'With DB Speed Records'
-        python Hybrid_BFMS.py
+        python Hybrid_BFMS.py  
+
+    - name: Run benchmark TFMS script
+      run: |
         python Hybrid_TFMS.py
+
+    - name: Run benchmark BF script
+      run: |
         python HybridBF.py
-        python HybridTF.py    
+
+    - name: Run benchmark TF script
+      run: |
+        python HybridTF.py  
+
+    - name: Debug Results.db
+      run: |
+        ls -l
 
     - name: Upload results database
       uses: actions/upload-artifact@v4
       with:
         name: benchmark-results
-        path: Results.db
+        path: 'With DB Speed Records/Results.db'
