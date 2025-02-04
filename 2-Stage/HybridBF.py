@@ -4,8 +4,6 @@ Created on Wed Mar 20 08:54:54 2024
 
 @author: Abdelrahman Ellithy
 """
-
-# Import modules
 import sympy as sp
 import time
 def HbisectionFalse(f, a, b, tol, max_iter=100):

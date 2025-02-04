@@ -4,68 +4,50 @@ Created on Wed Mar 20 08:54:54 2024
 
 @author: Abdelrahman Ellithy
 """
-
-# Import modules
 import sympy as sp
 import time
 
-def HbisectionFalseMS(f, a, b, tol, max_iter=100,delta=1e-4):
-    """
-    This function implements the Bisection method to find a root of the
-    function (f) within the interval [a, b] with a given tolerance (tol).
-    
-    Parameters:
-        f   (function): The function for which we want to find a root.\n
-        a      (float): The lower bound of the initial interval.\n
-        b      (float): The upper bound of the initial interval.\n
-        tol    (float): The desired tolerance.\n
-        max_iter (int): The maximum number of iterations.
-                     
-    Returns:
-        n    (int): The number of iterations.\n
-        x  (float): The estimated root of the function f within the interval [a, b].\n
-        fx (float): The function value at the estimated root.\n
-        a  (float): The lower bound of the final interval.\n
-        b  (float): The upper bound of the final interval.
-    """
-    
+def HbisectionFalseMS(f, a, b, tol, max_iter=100, delta=1e-4):
     fa, fb = f(a), f(b)
-    for n in range(1, max_iter + 1):
-        x = 0.5 * (a + b)
-        fx = f(x)
-        if fa * fx < 0:
-            b, fb = x, fx
+    n = 0
+    while n < max_iter:
+        n += 1
+        mid = (a + b) * 0.5
+        fmid = f(mid)
+        
+        if fa * fmid < 0:
+            b, fb = mid, fmid
         else:
-            a, fa = x, fx
+            a, fa = mid, fmid
         try:
-            dx = ((a * fb) -( b * fa))
-            x = dx / (fb - fa)
-            fx = f(x)
+            dx = (a * fb) - (b * fa)
+            fp = dx / (fb - fa )
+            ffp = f(fp)
         except ZeroDivisionError:
-            continue
-        if fa * fx < 0:
-            b, fb = x, fx
-        else:
-            a, fa = x, fx
+            ffp = fmid
+            fp = mid
 
-        if abs(fx) <= tol:
-            return n, x, fx, a, b
+        if fa * ffp < 0:
+            b, fb = fp, ffp
         else:
-            #Calculate xS using the modified secant method
-            f_delta = f(delta + x)
-            xS = x - (delta * fx) / (f_delta - fx)
+            a, fa = fp, ffp
+
+        if abs(ffp) <= tol:
+            return n, fp, ffp, a, b
+
+        xS = fp - delta * ffp / (f(fp + delta) - ffp + 1e-20)
+        if (a < xS< b):
             fxS = f(xS)
-            if (abs(fxS) < abs(fx)) and (xS > a and xS < b):
+            if abs(fxS) < abs(ffp):
                 if fa * fxS < 0:
-                    b = xS
+                    b, fb = xS, fxS
                 else:
-                    a = xS
-                x=xS
-                fx=fxS
-                if abs(fx) <= tol:
-                    return n, x, fx, a, b
-    # Return the number of iterations, estimated root, function value, lower bound, and upper bound
-    return n, x, fx, a, b
+                    a, fa = xS, fxS
+                if abs(fxS) <= tol:
+                    return n, xS, fxS, a, b
+
+    final_x = (a + b) * 0.5
+    return n, final_x, f(final_x), a, b
 
 # Define the symbolic variable x
 x = sp.Symbol('x')
