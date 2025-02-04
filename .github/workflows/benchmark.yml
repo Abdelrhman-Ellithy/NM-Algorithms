@@ -25,7 +25,6 @@ jobs:
         pip install sympy
 
     - name: Run benchmark scripts
-      working-directory: ./With DB Speed Records
       run: |
         python Hybrid_BFMS.py
         python Hybrid_TFMS.py
@@ -34,11 +33,10 @@ jobs:
 
     - name: Verify results file
       run: |
-        ls -lh "./With DB Speed Records/Results.db"
-        file "./With DB Speed Records/Results.db"
+        ls -l 
 
     - name: Upload results database
       uses: actions/upload-artifact@v4
       with:
         name: benchmark-results
-        path: ./With DB Speed Records/Results.db
+        path: ./Results.db
