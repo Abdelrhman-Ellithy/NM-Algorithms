@@ -1,9 +1,7 @@
 name: Benchmark Pipeline
-
 on:
   push:
     branches: [ main ]
-
 jobs:
   run-benchmarks:
     runs-on: ubuntu-latest
