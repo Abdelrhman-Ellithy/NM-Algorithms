@@ -109,4 +109,4 @@ for i in range(0,len(dataset)) :
                 n, x, fx, a, b = HtrisectionFalseMS(f, a, b, tol)
         t2=time.time()
         record_speed(i,method,(t2-t1))
-        print('problem: '+i,' method: '+ method,' time: '+(t2-t1))
+        print(f'problem: {i}, method: {method}, time: {t2 - t1}')
