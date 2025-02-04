@@ -8,10 +8,26 @@ Created on Wed Mar 20 08:54:54 2024
 # Import modules
 import sympy as sp
 import time
-# -*- coding: utf-8 -*-
-import sympy as sp
-import time
-
+import sqlite3
+def rest_data():
+    con = sqlite3.connect('Results.db')
+    cursor = con.cursor()
+    cursor.execute(""" 
+            create table IF NOT EXISTS results(
+            id Integer PRIMARY KEY not null,
+            problemId Integer problemId not null,
+            method_name text,
+            CPU_Time REAL
+            )""")
+    con.commit()
+    con.close()
+def record_speed(ID, methood,time ) :
+    con=sqlite3.connect('Results.db')
+    cursor=con.cursor()
+    cursor.execute('insert into results(problemId, method_name , CPU_Time) values (?,?,?)',( ID,methood,time ))
+    con.commit()
+    con.close()
+    
 def HtrisectionFalseMS(f, a, b, tol, max_iter=100, delta=1e-4):
 
     fa, fb = f(a), f(b)
@@ -58,40 +74,6 @@ def HtrisectionFalseMS(f, a, b, tol, max_iter=100, delta=1e-4):
     final_x = (a + b) * 0.5
     return max_iter, final_x, f(final_x), a, b
 
-# Benchmarking setup remains the same
-x = sp.Symbol('x')
-dataset = [
-    (x * sp.exp(x) - 7, 1, 2),
-    (x**3 - x - 1, 1, 2),
-    (x**2 - x - 2, 1, 4),
-    (x - sp.cos(x), 0, 1),
-    (x**2 - 10, 3, 4),
-    (sp.sin(x) - x**2, 0.5, 1),
-    (x + sp.ln(x), 0.1, 1),
-    (sp.exp(x) - 3*x - 2, 2, 3),
-    (x**2 + sp.exp(x/2) - 5, 1, 2),
-    (x * sp.sin(x) - 1, 0, 2),
-    (x * sp.cos(x) + 1, -2, 4),
-    (x**10 - 1, 0, 1.3),
-    (x**2 - x - 2, 1, 4),
-    (x**2 + 2*x - 7, 1, 3)
-]
-
-tol = 1e-14
-print('Optimized Hybrid HtrisectionFalseMS\n')
-print("\t\tIter\t\t Root\t\tFunction Value\t\t Lower Bound\t\t Upper Bound\t\t Time")
-for i in range(len(dataset)):    
-    f_expr, a_init, b_init = dataset[i]
-    f = sp.lambdify(x, f_expr)
-    t_start = time.time()
-    n, root, fval, a_final, b_final = HtrisectionFalseMS(f, a_init, b_init, tol)
-    elapsed = time.time() - t_start
-    print(f"problem{i+1}| \t{n} \t {root:.16f} \t {fval:.16f} \t {a_final:.16f} \t {b_final:.16f} \t {elapsed:.20f}")
-
-
-# Define the symbolic variable x
-x = sp.Symbol('x')
-
 # Define the symbolic variable x
 x = sp.Symbol('x')
 dataset=[
@@ -111,14 +93,18 @@ dataset=[
          ,(x**2+2*x-7,1,3)
          ]
 tol = 1e-14
-print('Abdelrahman Hybrid HtrisectionFalseMS\n')
-print("\t\tIter\t\t Root\t\tFunction Value\t\t Lower Bound\t\t Upper Bound")
-for i in range(0,len(dataset)) :    
-    f=dataset[i][0]
-    f = sp.lambdify('x', f)
-    a=dataset[i][1]
-    b=dataset[i][2]
-    t1=time.time()
-    n, x, fx, a, b = HtrisectionFalseMS(f, a, b, tol)
-    t=(time.time()-(t1))
-    print(f"problem{i+1}| \t{n} \t {x:.16f} \t {fx:.16f} \t {a:.16f} \t {b:.16f} \t {t:.16f}")
+print()
+method='Abdelrahman Hybrid HtrisectionFalseMS'
+print(method)
+rest_data()
+print("\t\t\tIter\t\t Root\t\t\t\tFunction Value\t\t\t Lower Bound\t\t\t Upper Bound")
+for i in range(0,len(dataset)) : 
+    t1=time.time() 
+    for j in range (0,500):    
+            f=dataset[i][0]
+            f = sp.lambdify('x', f)
+            a=dataset[i][1]
+            b=dataset[i][2]
+            n, x, fx, a, b = HtrisectionFalseMS(f, a, b, tol)
+    t2=time.time()
+    record_speed(i,method,(t2-t1))

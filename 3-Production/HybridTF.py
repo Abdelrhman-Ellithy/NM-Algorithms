@@ -4,8 +4,29 @@ Created on Wed Mar 20 08:54:54 2024
 
 @author: Abdelrahman Ellithy
 """
+
+# Import modules
 import sympy as sp
 import time
+import sqlite3
+def rest_data():
+    con = sqlite3.connect('Results.db')
+    cursor = con.cursor()
+    cursor.execute(""" 
+            create table IF NOT EXISTS results(
+            id Integer PRIMARY KEY not null,
+            problemId Integer problemId not null,
+            method_name text,
+            CPU_Time REAL
+            )""")
+    con.commit()
+    con.close()
+def record_speed(ID, methood,time ) :
+    con=sqlite3.connect('Results.db')
+    cursor=con.cursor()
+    cursor.execute('insert into results(problemId, method_name , CPU_Time) values (?,?,?)',( ID,methood,time ))
+    con.commit()
+    con.close()
 def HtrisectionFalse(f, a, b, tol, max_iter=100):
     """
     This function implements the Bisection method to find a root of the
@@ -29,8 +50,9 @@ def HtrisectionFalse(f, a, b, tol, max_iter=100):
     fa, fb = f(a), f(b)
     for n in range(1, max_iter + 1):
         # less +-/
-        x1 = a + (b - a)/3
-        x2 = b - (b - a)/3
+        diff = b - a
+        x1 = a + diff/3
+        x2 = b - diff/3
         fx1, fx2 = f(x1), f(x2)
 
         if abs(fx1) <= tol: return n, x1, fx1, a, b
@@ -49,7 +71,6 @@ def HtrisectionFalse(f, a, b, tol, max_iter=100):
             x = dx / dd
         except ZeroDivisionError:
             continue
-
         fx = f(x)
         if abs(fx) <= tol:
             return n, x, fx, a, b
@@ -58,8 +79,9 @@ def HtrisectionFalse(f, a, b, tol, max_iter=100):
             b, fb = x, fx
         else:
             a, fa = x, fx
+    final_x=(a+b)/2    
+    return max_iter, final_x, f(final_x), a, b
 
-    return max_iter, (a + b)/2, f((a + b)/2), a, b
 
 # Define the symbolic variable x
 x = sp.Symbol('x')
@@ -80,14 +102,17 @@ dataset=[
          ,(x**2+2*x-7,1,3)
          ]
 tol = 1e-14
-print("Abdelrahman Hybrid HtrisectionFalse")
-print("\t\tIter\t\t Root\t\tFunction Value\t\t Lower Bound\t\t Upper Bound\t\t Time")
-for i in range(0,len(dataset)) :    
-    f=dataset[i][0]
-    f = sp.lambdify('x', f)
-    a=dataset[i][1]
-    b=dataset[i][2]
-    t1=time.time()
-    n, x, fx, a, b = HtrisectionFalse(f, a, b, tol)
-    t=(time.time()-(t1))
-    print(f"problem{i+1}| \t{n} \t {x:.16f} \t {fx:.16f} \t {a:.16f} \t {b:.16f} \t {t:.20f}")
+method='Abdelrahman Hybrid HtrisectionFalse'
+print(method)
+rest_data()
+print("\t\t\tIter\t\t Root\t\t\t\tFunction Value\t\t\t Lower Bound\t\t\t Upper Bound")
+for i in range(0,len(dataset)) : 
+    t1=time.time() 
+    for j in range (0,500):    
+            f=dataset[i][0]
+            f = sp.lambdify('x', f)
+            a=dataset[i][1]
+            b=dataset[i][2]
+            n, x, fx, a, b = HtrisectionFalse(f, a, b, tol)
+    t2=time.time()
+    record_speed(i,method,(t2-t1))

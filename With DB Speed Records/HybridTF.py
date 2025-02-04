@@ -106,13 +106,15 @@ method='Abdelrahman Hybrid HtrisectionFalse'
 print(method)
 rest_data()
 print("\t\t\tIter\t\t Root\t\t\t\tFunction Value\t\t\t Lower Bound\t\t\t Upper Bound")
-for i in range(0,len(dataset)) : 
-    t1=time.time() 
-    for j in range (0,500):    
-            f=dataset[i][0]
-            f = sp.lambdify('x', f)
-            a=dataset[i][1]
-            b=dataset[i][2]
-            n, x, fx, a, b = HtrisectionFalse(f, a, b, tol)
-    t2=time.time()
-    record_speed(i,method,(t2-t1))
+for i in range(0,len(dataset)) :
+    for c in range(0,100): 
+        t1=time.time() 
+        for j in range (0,100):    
+                f=dataset[i][0]
+                f = sp.lambdify('x', f)
+                a=dataset[i][1]
+                b=dataset[i][2]
+                n, x, fx, a, b = HtrisectionFalse(f, a, b, tol)
+        t2=time.time()
+        record_speed(i,method,(t2-t1))
+        print('problem: '+i,' method: '+ method,' time: '+(t2-t1))
