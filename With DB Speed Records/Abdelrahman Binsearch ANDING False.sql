@@ -1,1 +1,1 @@
-SELECT method_name,avg(CPU_TIME),count(id) FROM results GROUP by method_name
+SELECT method_name, problemId, avg(CPU_TIME) FROM results where problemId=13 GROUP by method_name;
