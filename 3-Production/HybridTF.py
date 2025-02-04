@@ -4,8 +4,6 @@ Created on Wed Mar 20 08:54:54 2024
 
 @author: Abdelrahman Ellithy
 """
-
-# Import modules
 import sympy as sp
 import time
 def HtrisectionFalse(f, a, b, tol, max_iter=100):
@@ -50,12 +48,12 @@ def HtrisectionFalse(f, a, b, tol, max_iter=100):
             dd = fb - fa
             x = dx / dd
         except ZeroDivisionError:
-            return n, (a + b)/2, f((a + b)/2), a, b
-        
-        fx = f(x)
-        if abs(fx) <= tol: return n, x, fx, a, b
+            continue
 
-        # Update interval
+        fx = f(x)
+        if abs(fx) <= tol:
+            return n, x, fx, a, b
+        
         if fa * fx < 0:
             b, fb = x, fx
         else:
@@ -82,7 +80,6 @@ dataset=[
          ,(x**2+2*x-7,1,3)
          ]
 tol = 1e-14
-
 print("Abdelrahman Hybrid HtrisectionFalse")
 print("\t\tIter\t\t Root\t\tFunction Value\t\t Lower Bound\t\t Upper Bound\t\t Time")
 for i in range(0,len(dataset)) :    
