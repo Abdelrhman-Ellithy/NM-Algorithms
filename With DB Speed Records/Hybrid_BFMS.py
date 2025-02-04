@@ -15,15 +15,16 @@ def rest_data():
     cursor.execute(""" 
             create table IF NOT EXISTS results(
             id Integer PRIMARY KEY not null,
+            problemId Integer problemId not null,
             method_name text,
             CPU_Time REAL
             )""")
     con.commit()
     con.close()
-def record_speed( methood,time ) :
+def record_speed(ID, methood,time ) :
     con=sqlite3.connect('Results.db')
     cursor=con.cursor()
-    cursor.execute('insert into results(method_name , CPU_Time) values (?,?)',( methood,time ))
+    cursor.execute('insert into results(problemId, method_name , CPU_Time) values (?,?,?)',( ID,methood,time ))
     con.commit()
     con.close()
 def HbisectionFalseMS(f, a, b, tol, max_iter=100, delta=1e-4):
@@ -100,4 +101,4 @@ for i in range(0,len(dataset)) :
             b=dataset[i][2]
             n, x, fx, a, b = HbisectionFalseMS(f, a, b, tol)
     t2=time.time()
-    record_speed(method,(t2-t1))
+    record_speed(i,method,(t2-t1))
