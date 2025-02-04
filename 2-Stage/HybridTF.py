@@ -4,7 +4,6 @@ Created on Wed Mar 20 08:54:54 2024
 
 @author: Abdelrahman Ellithy
 """
-
 import sympy as sp
 import time
 def HtrisectionFalse(f, a, b, tol, max_iter=100):
@@ -27,54 +26,40 @@ def HtrisectionFalse(f, a, b, tol, max_iter=100):
         b  (float): The upper bound of the final interval.
     """
     
-    # Initialize the iteration counter
-    n = 0
-    # Iterate until maximum iterations reached, or |f(x)| <= tol
-    while n < max_iter:
-        # Increment the iteration counter by 1
-        n += 1
-        
-        # Calculate the midpoint of the interval
-        # Calculate x1 and x2
-        x1 = (b + 2*a) / 3
-        x2 = (2*b + a) / 3
-        
-        # Calculate f(x1), f(x2) and f(a)
-        fx1 = f(x1)
-        fx2 = f(x2)
-        fa = f(a)
-        
-        # Choose the root with the smaller error
-        if abs(fx1) < abs(fx2):
-            x = x1
-            fx = fx1
-        else:
-            x = x2
-            fx = fx2
-        
-        # Check if the absolute value of f(x) is smaller than the tolerance
-        if abs(fx) <= tol:
-            break
-        # Determine the new interval [a, b]
-        elif fa * fx1 < 0:
-            b = x1
+    fa, fb = f(a), f(b)
+    for n in range(1, max_iter + 1):
+        # less +-/
+        x1 = a + (b - a)/3
+        x2 = b - (b - a)/3
+        fx1, fx2 = f(x1), f(x2)
+
+        if abs(fx1) <= tol: return n, x1, fx1, a, b
+        if abs(fx2) <= tol: return n, x2, fx2, a, b
+
+        if fa * fx1 < 0:
+            a, b, fb = a, x1, fx1
         elif fx1 * fx2 < 0:
-            a = x1
-            b = x2
+            a, b, fa, fb = x1, x2, fx1, fx2
         else:
-            a = x2
-        fa=f(a)
-        fb=f(b)
-        x = (a*fb - b*fa) / (fb - fa)
+            a, fa = x2, fx2
+            
+        try:
+            dx = (a * fb - b * fa)
+            dd = fb - fa
+            x = dx / dd
+        except ZeroDivisionError:
+            return n, (a + b)/2, f((a + b)/2), a, b
+        
         fx = f(x)
+        if abs(fx) <= tol: return n, x, fx, a, b
+
+        # Update interval
         if fa * fx < 0:
-            b = x
+            b, fb = x, fx
         else:
-            a = x
-        if abs(fx) <= tol:
-            break
-    # Return the number of iterations, estimated root, function value, lower bound, and upper bound
-    return n, x, fx, a, b
+            a, fa = x, fx
+
+    return max_iter, (a + b)/2, f((a + b)/2), a, b
 
 # Define the symbolic variable x
 x = sp.Symbol('x')
