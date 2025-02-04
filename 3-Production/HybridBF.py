@@ -4,29 +4,8 @@ Created on Wed Mar 20 08:54:54 2024
 
 @author: Abdelrahman Ellithy
 """
-
-# Import modules
 import sympy as sp
 import time
-import sqlite3
-def rest_data():
-    con = sqlite3.connect('Results.db')
-    cursor = con.cursor()
-    cursor.execute(""" 
-            create table IF NOT EXISTS results(
-            id Integer PRIMARY KEY not null,
-            method_name text,
-            CPU_Time REAL
-            )""")
-    con.commit()
-    con.close()
-def record_speed( methood,time ) :
-    con=sqlite3.connect('Results.db')
-    cursor=con.cursor()
-    cursor.execute('insert into results(method_name , CPU_Time) values (?,?)',( methood,time ))
-    con.commit()
-    con.close()
-# Define the bisection function
 def HbisectionFalse(f, a, b, tol, max_iter=100):
     fa, fb = f(a), f(b)
     for n in range(1, max_iter + 1):
@@ -57,7 +36,6 @@ def HbisectionFalse(f, a, b, tol, max_iter=100):
     final_x = 0.5 * (a + b)
     return max_iter, final_x, f(final_x), a, b
 
-
 # Define the symbolic variable x
 x = sp.Symbol('x')
 dataset=[
@@ -77,17 +55,14 @@ dataset=[
          ,(x**2+2*x-7,1,3)
          ]
 tol = 1e-14
-method='nAbdelrahman Hybrid HbisectionFalse'
-print(method)
-rest_data()
-print("\t\t\tIter\t\t Root\t\t\t\tFunction Value\t\t\t Lower Bound\t\t\t Upper Bound")
-for i in range(0,len(dataset)) : 
-    t1=time.time() 
-    for j in range (0,500):    
-            f=dataset[i][0]
-            f = sp.lambdify('x', f)
-            a=dataset[i][1]
-            b=dataset[i][2]
-            n, x, fx, a, b = HbisectionFalse(f, a, b, tol)
-    t2=time.time()
-    record_speed(method,(t2-t1))
+print("\nAbdelrahman Hybrid HbisectionFalse")
+print("\t\tIter\t\t Root\t\tFunction Value\t\t Lower Bound\t\t Upper Bound\t\t Time")
+for i in range(0,len(dataset)) :    
+    f=dataset[i][0]
+    f = sp.lambdify('x', f)
+    a=dataset[i][1]
+    b=dataset[i][2]
+    t1=time.time()
+    n, x, fx, a, b = HbisectionFalse(f, a, b, tol)
+    t=time.time()-(t1)
+    print(f"problem{i+1}| \t{n} \t {x:.16f} \t {fx:.16f} \t {a:.16f} \t {b:.16f} \t {t:.16f}")

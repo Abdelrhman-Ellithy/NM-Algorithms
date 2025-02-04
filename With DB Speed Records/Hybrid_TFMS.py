@@ -26,96 +26,52 @@ def record_speed( methood,time ) :
     cursor.execute('insert into results(method_name , CPU_Time) values (?,?)',( methood,time ))
     con.commit()
     con.close()
-# Define the bisection function
-def HtrisectionFalseMS(f, a, b, tol, max_iter=100,delta=1e-4):
-    """
-    This function implements the Bisection method to find a root of the
-    function (f) within the interval [a, b] with a given tolerance (tol).
     
-    Parameters:
-        f   (function): The function for which we want to find a root.\n
-        a      (float): The lower bound of the initial interval.\n
-        b      (float): The upper bound of the initial interval.\n
-        tol    (float): The desired tolerance.\n
-        max_iter (int): The maximum number of iterations.
-                     
-    Returns:
-        n    (int): The number of iterations.\n
-        x  (float): The estimated root of the function f within the interval [a, b].\n
-        fx (float): The function value at the estimated root.\n
-        a  (float): The lower bound of the final interval.\n
-        b  (float): The upper bound of the final interval.
-    """
-    
-    # Initialize the iteration counter
-    n = 0
-    # Iterate until maximum iterations reached, or |f(x)| <= tol
-    while n < max_iter:
-        # Increment the iteration counter by 1
-        n += 1
-        
-        # Calculate x1 and x2
-        x1 = (b + 2*a) / 3
-        x2 = (2*b + a) / 3
-        
-        # Calculate f(x1), f(x2) and f(a)
-        fx1 = f(x1)
-        fx2 = f(x2)
-        fa = f(a)
-        
-        # Choose the root with the smaller error
-        if abs(fx1) < abs(fx2):
-            x = x1
-            fx = fx1
-        else:
-            x = x2
-            fx = fx2
-        
-        # Check if the absolute value of f(x) is smaller than the tolerance
-        if abs(fx) <= tol:
-            break
-        # Determine the new interval [a, b]
-        elif fa * fx1 < 0:
-            b = x1
+def HtrisectionFalseMS(f, a, b, tol, max_iter=100, delta=1e-4):
+
+    fa, fb = f(a), f(b)
+    for n in range(1, max_iter + 1):
+        diff = b - a
+        x1 = a + diff/3
+        x2 = b - diff/3
+        fx1, fx2 = f(x1), f(x2)
+        if abs(fx1) <= tol: return n, x1, fx1, a, b
+        if abs(fx2) <= tol: return n, x2, fx2, a, b
+
+        if fa * fx1 < 0:
+            b, fb = x1, fx1
         elif fx1 * fx2 < 0:
-            a = x1
-            b = x2
+            a, b, fa, fb = x1, x2, fx1, fx2
         else:
-            a = x2
-        fb=f(b)
-        fa=f(a)
-        if abs(fx) <= tol:
-            break
-        x = (a*fb - b*fa) / (fb - fa)
-        fx = f(x)
-        if fa * fx < 0:
-            b = x
+            a, fa = x2, fx2
+        try:
+            dx = (a * fb) - (b * fa)
+            fp = dx / (fb - fa )
+            ffp = f(fp)
+        except ZeroDivisionError:
+            continue
+        if fa * ffp < 0:
+            b, fb = fp, ffp
         else:
-            a = x
-        if abs(fx) <= tol:
-            break
-        else:
-            #Calculate xS using the modified secant method
-            f_delta = f(delta + x)
-            xS = x - (delta * fx) / (f_delta - fx)
+            a, fa = fp, ffp
+
+        if abs(ffp) <= tol:
+            return n, fp, ffp, a, b
+            
+        xS = fp - delta * ffp / (f(fp + delta) - ffp)
+        if (a < xS< b):
             fxS = f(xS)
-            # If xS is better and xS in the interval [a, b], 
-            # use xS to determine the new interval [a, b]
-            if (abs(fxS) < abs(fx)) and (xS > a and xS < b):
+            if abs(fxS) < abs(ffp):
                 if fa * fxS < 0:
-                    b = xS
+                    b, fb = xS, fxS
                 else:
-                    a = xS
-                x=xS
-                fx=f(x)
-                if abs(fx) <= tol:
-                    break
-    # Return the number of iterations, estimated root, function value, lower bound, and upper bound
-    return n, x, fx, a, b
+                    a, fa = xS, fxS
+                if abs(fxS) <= tol:
+                    return n, xS, fxS, a, b
 
-
-# Define the symbolic variable x
-x = sp.Symbol('x')
+    # Fallback to best estimate
+    final_x = (a + b) * 0.5
+    return max_iter, final_x, f(final_x), a, b
 
 # Define the symbolic variable x
 x = sp.Symbol('x')
@@ -141,17 +97,13 @@ method='Abdelrahman Hybrid HtrisectionFalseMS'
 print(method)
 rest_data()
 print("\t\t\tIter\t\t Root\t\t\t\tFunction Value\t\t\t Lower Bound\t\t\t Upper Bound")
-for c in range(0,20):
-    for j in range (0,50):    
-        t1=time.time()
-        for i in range(0,len(dataset)) :    
+for i in range(0,len(dataset)) : 
+    t1=time.time() 
+    for j in range (0,500):    
             f=dataset[i][0]
             f = sp.lambdify('x', f)
             a=dataset[i][1]
             b=dataset[i][2]
             n, x, fx, a, b = HtrisectionFalseMS(f, a, b, tol)
-            #print(f"problem{i+1}| \t{n} \t {x:.16f} \t {fx:.16f} \t {a:.16f} \t {b:.16f}")
-            #print(f"{n}")
-        t2=time.time()
-        #print("%.10f" %((t2-t1)/14))
-        record_speed(method,((t2-t1)/14))
+    t2=time.time()
+    record_speed(method,(t2-t1))

@@ -58,8 +58,8 @@ def HtrisectionFalse(f, a, b, tol, max_iter=100):
             b, fb = x, fx
         else:
             a, fa = x, fx
-
-    return max_iter, (a + b)/2, f((a + b)/2), a, b
+    final_x=(a+b)/2    
+    return max_iter, final_x, f(final_x), a, b
 
 # Define the symbolic variable x
 x = sp.Symbol('x')

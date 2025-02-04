@@ -5,8 +5,13 @@ Created on Wed Mar 20 08:54:54 2024
 @author: Abdelrahman Ellithy
 """
 
+# Import modules
 import sympy as sp
 import time
+# -*- coding: utf-8 -*-
+import sympy as sp
+import time
+
 def HtrisectionFalseMS(f, a, b, tol, max_iter=100, delta=1e-4):
 
     fa, fb = f(a), f(b)
@@ -82,6 +87,10 @@ for i in range(len(dataset)):
     n, root, fval, a_final, b_final = HtrisectionFalseMS(f, a_init, b_init, tol)
     elapsed = time.time() - t_start
     print(f"problem{i+1}| \t{n} \t {root:.16f} \t {fval:.16f} \t {a_final:.16f} \t {b_final:.16f} \t {elapsed:.20f}")
+
+
+# Define the symbolic variable x
+x = sp.Symbol('x')
 
 # Define the symbolic variable x
 x = sp.Symbol('x')

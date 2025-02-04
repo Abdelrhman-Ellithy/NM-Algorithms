@@ -26,7 +26,6 @@ def record_speed( methood,time ) :
     cursor.execute('insert into results(method_name , CPU_Time) values (?,?)',( methood,time ))
     con.commit()
     con.close()
-# Define the bisection function
 def HtrisectionFalse(f, a, b, tol, max_iter=100):
     """
     This function implements the Bisection method to find a root of the
@@ -47,54 +46,40 @@ def HtrisectionFalse(f, a, b, tol, max_iter=100):
         b  (float): The upper bound of the final interval.
     """
     
-    # Initialize the iteration counter
-    n = 0
-    # Iterate until maximum iterations reached, or |f(x)| <= tol
-    while n < max_iter:
-        # Increment the iteration counter by 1
-        n += 1
-        
-        # Calculate the midpoint of the interval
-        # Calculate x1 and x2
-        x1 = (b + 2*a) / 3
-        x2 = (2*b + a) / 3
-        
-        # Calculate f(x1), f(x2) and f(a)
-        fx1 = f(x1)
-        fx2 = f(x2)
-        fa = f(a)
-        
-        # Choose the root with the smaller error
-        if abs(fx1) < abs(fx2):
-            x = x1
-            fx = fx1
-        else:
-            x = x2
-            fx = fx2
-        
-        # Check if the absolute value of f(x) is smaller than the tolerance
-        if abs(fx) <= tol:
-            break
-        # Determine the new interval [a, b]
-        elif fa * fx1 < 0:
-            b = x1
+    fa, fb = f(a), f(b)
+    for n in range(1, max_iter + 1):
+        # less +-/
+        diff = b - a
+        x1 = a + diff/3
+        x2 = b - diff/3
+        fx1, fx2 = f(x1), f(x2)
+
+        if abs(fx1) <= tol: return n, x1, fx1, a, b
+        if abs(fx2) <= tol: return n, x2, fx2, a, b
+
+        if fa * fx1 < 0:
+            a, b, fb = a, x1, fx1
         elif fx1 * fx2 < 0:
-            a = x1
-            b = x2
+            a, b, fa, fb = x1, x2, fx1, fx2
         else:
-            a = x2
-        fa=f(a)
-        fb=f(b)
-        x = (a*fb - b*fa) / (fb - fa)
+            a, fa = x2, fx2
+            
+        try:
+            dx = (a * fb - b * fa)
+            dd = fb - fa
+            x = dx / dd
+        except ZeroDivisionError:
+            continue
         fx = f(x)
-        if fa * fx < 0:
-            b = x
-        else:
-            a = x
         if abs(fx) <= tol:
-            break
-    # Return the number of iterations, estimated root, function value, lower bound, and upper bound
-    return n, x, fx, a, b
+            return n, x, fx, a, b
+        
+        if fa * fx < 0:
+            b, fb = x, fx
+        else:
+            a, fa = x, fx
+    final_x=(a+b)/2    
+    return max_iter, final_x, f(final_x), a, b
 
 
 # Define the symbolic variable x
@@ -116,34 +101,17 @@ dataset=[
          ,(x**2+2*x-7,1,3)
          ]
 tol = 1e-14
-'''
-print()
-print("Abdelrahman Hybrid HtrisectionFalse")
-print("\t\t\tIter\t\t Root\t\t\t\tFunction Value\t\t\t Lower Bound\t\t\t Upper Bound")
-for i in range(0,len(dataset)) :    
-    f=dataset[i][0]
-    f = sp.lambdify('x', f)
-    a=dataset[i][1]
-    b=dataset[i][2]
-    n, x, fx, a, b = HtrisectionFalse(f, a, b, tol)
-    #print(f"problem{i+1}| \t{n} \t {x:.16f} \t {fx:.16f} \t {a:.16f} \t {b:.16f}")
-    print(f"{n}")
-'''
 method='Abdelrahman Hybrid HtrisectionFalse'
 print(method)
 rest_data()
 print("\t\t\tIter\t\t Root\t\t\t\tFunction Value\t\t\t Lower Bound\t\t\t Upper Bound")
-for c in range(0,10):
-    for j in range (0,100):    
-        t1=time.time()
-        for i in range(0,len(dataset)) :    
+for i in range(0,len(dataset)) : 
+    t1=time.time() 
+    for j in range (0,500):    
             f=dataset[i][0]
             f = sp.lambdify('x', f)
             a=dataset[i][1]
             b=dataset[i][2]
             n, x, fx, a, b = HtrisectionFalse(f, a, b, tol)
-            #print(f"problem{i+1}| \t{n} \t {x:.16f} \t {fx:.16f} \t {a:.16f} \t {b:.16f}")
-            #print(f"{n}")
-        t2=time.time()
-        #print("%.10f" %((t2-t1)/14))
-        record_speed(method,((t2-t1)/14))
+    t2=time.time()
+    record_speed(method,(t2-t1))
