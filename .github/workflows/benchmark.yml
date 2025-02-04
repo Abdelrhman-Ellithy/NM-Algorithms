@@ -1,7 +1,9 @@
 name: Benchmark Pipeline
+
 on:
   push:
     branches: [ main ]
+
 jobs:
   run-benchmarks:
     runs-on: ubuntu-latest
@@ -9,6 +11,8 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
 
     - name: Set up Python
       uses: actions/setup-python@v4
@@ -20,31 +24,21 @@ jobs:
         python -m pip install --upgrade pip
         pip install sympy
 
-    - name: Change Directory
-      run: cd 'With DB Speed Records'
-
-    - name: Run benchmark BFMS script
+    - name: Run benchmark scripts
+      working-directory: ./With DB Speed Records
       run: |
-        python Hybrid_BFMS.py  
-
-    - name: Run benchmark TFMS script
-      run: |
+        python Hybrid_BFMS.py
         python Hybrid_TFMS.py
-
-    - name: Run benchmark BF script
-      run: |
         python HybridBF.py
+        python HybridTF.py
 
-    - name: Run benchmark TF script
+    - name: Verify results file
       run: |
-        python HybridTF.py  
-
-    - name: Debug Results.db
-      run: |
-        ls -l
+        ls -lh "./With DB Speed Records/Results.db"
+        file "./With DB Speed Records/Results.db"
 
     - name: Upload results database
       uses: actions/upload-artifact@v4
       with:
         name: benchmark-results
-        path: 'With DB Speed Records/Results.db'
+        path: ./With DB Speed Records/Results.db
