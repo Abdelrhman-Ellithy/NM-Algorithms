@@ -29,24 +29,23 @@ jobs:
 
     - name: Run BF scripts
       run: |
-        python Optimized_BF.py
         python Old_BF.py
-
-    - name: Run TFMS scripts
-      run: |
-        python Optimized_TFMS.py
-        python Old_TFMS.py
-
-    - name: Run BFMS scripts
-      run: |
-        python Optimized_BFMS.py
-        python Old_BFMS.py
-
+        python Optimized_BF.py
 
     - name: Run TF scripts
       run: |
-        python Optimized_TF.py
         python Old_TF.py
+        python Optimized_TF.py
+        
+    - name: Run TFMS scripts
+      run: |
+        python Old_TFMS.py
+        python Optimized_TFMS.py
+
+    - name: Run BFMS scripts
+      run: |
+        python Old_BFMS.py
+        python Optimized_BFMS.py
 
     - name: Verify results file
       run: |

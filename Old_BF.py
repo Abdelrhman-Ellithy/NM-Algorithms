@@ -66,11 +66,10 @@ def HbisectionFalse(f, a, b, tol, max_iter=100):
         # Determine the new interval [a, b]
         if fa * fx < 0:
             b = x
+            fb =fx
         else:
             a = x 
-         
-        fb=f(b)
-        fa=f(a)
+            fa =fx
         x = (a*fb - b*fa) / (fb - fa)
         fx = f(x)
         if fa * fx < 0:
@@ -115,5 +114,4 @@ for i in range(0,len(dataset)) :
         t2=time.time()
         t=(t2-t1)
         record_speed(i,method,t)
-        print(f'problem: {i}, method: {method}, time: {t}')
         print(f"problem{i+1}| \t{n} \t {x:.16f} \t {fx:.16f} \t {a:.16f} \t {b:.16f} \t {t:.20f}")
