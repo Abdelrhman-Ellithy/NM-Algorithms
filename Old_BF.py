@@ -66,10 +66,10 @@ def HbisectionFalse(f, a, b, tol, max_iter=100):
         # Determine the new interval [a, b]
         if fa * fx < 0:
             b = x
-            fb =fx
         else:
             a = x 
             fa =fx
+        fb =f(b)
         x = (a*fb - b*fa) / (fb - fa)
         fx = f(x)
         if fa * fx < 0:
