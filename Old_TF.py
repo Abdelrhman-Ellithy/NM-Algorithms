@@ -113,7 +113,7 @@ dataset=[
          ,(x**2+2*x-7,1,3)
          ]
 tol = 1e-14
-
+rest_data()
 method="Old_TF"
 print("\t\tIter\t\t Root\t\tFunction Value\t\t Lower Bound\t\t Upper Bound\t\t Time")
 for i in range(0,len(dataset)) :

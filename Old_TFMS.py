@@ -133,6 +133,7 @@ dataset=[
          ]
 tol = 1e-14
 method='Old_TFMS'
+rest_data()
 print("\t\tIter\t\t Root\t\tFunction Value\t\t Lower Bound\t\t Upper Bound\t\t Time")
 for i in range(0,len(dataset)) :
     for c in range(0,100): 
