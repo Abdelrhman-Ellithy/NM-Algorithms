@@ -14,6 +14,9 @@ jobs:
       with:
         fetch-depth: 0
 
+    - name: Clean previous results
+      run: rm -f Results.db
+
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
@@ -24,12 +27,26 @@ jobs:
         python -m pip install --upgrade pip
         pip install sympy
 
-    - name: Run benchmark scripts
+    - name: Run BF scripts
       run: |
-        python Hybrid_BFMS.py
-        python Hybrid_TFMS.py
-        python HybridBF.py
-        python HybridTF.py
+        python Optimized_BF.py
+        python Old_BF.py
+
+    - name: Run TFMS scripts
+      run: |
+        python Optimized_TFMS.py
+        python Old_TFMS.py
+
+    - name: Run BFMS scripts
+      run: |
+        python Optimized_BFMS.py
+        python Old_BFMS.py
+
+
+    - name: Run TF scripts
+      run: |
+        python Optimized_TF.py
+        python Old_TF.py
 
     - name: Verify results file
       run: |

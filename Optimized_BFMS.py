@@ -88,10 +88,10 @@ dataset=[
          ,(x**2+2*x-7,1,3)
          ]
 tol = 1e-14
-method='Abdelrahman Hybrid HbisectionFalseMS'
+method='Optimized_BFMS'
 print(method)
 rest_data()
-print("\t\t\tIter\t\t Root\t\t\t\tFunction Value\t\t\t Lower Bound\t\t\t Upper Bound")
+print("\t\tIter\t\t Root\t\tFunction Value\t\t Lower Bound\t\t Upper Bound\t\t Time")
 for i in range(0,len(dataset)) :
     for c in range(0,100): 
         t1=time.time() 
@@ -102,5 +102,7 @@ for i in range(0,len(dataset)) :
                 b=dataset[i][2]
                 n, x, fx, a, b = HbisectionFalseMS(f, a, b, tol)
         t2=time.time()
-        record_speed(i,method,(t2-t1))
-        print(f'problem: {i}, method: {method}, time: {t2 - t1}')
+        t=(t2-t1)
+        record_speed(i,method,t)
+        print(f'problem: {i}, method: {method}, time: {t}')
+        print(f"problem{i+1}| \t{n} \t {x:.16f} \t {fx:.16f} \t {a:.16f} \t {b:.16f} \t {t:.20f}")
