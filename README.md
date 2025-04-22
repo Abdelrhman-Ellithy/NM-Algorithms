@@ -6,3 +6,4 @@
 - Stage: contains the algorithms I work on currently for optimzation 
 
 - Production:  contains the final algorithms after optimzation
+### envs deprecated, availble files are finalized
