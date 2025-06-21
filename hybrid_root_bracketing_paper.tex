@@ -86,44 +86,7 @@ The main contributions include:
 
 \subsubsection{Optimized Bisection-False Position (Optimized\_BF)}
 
-The Optimized Bisection-False Position (Optimized\_BF) algorithm is a hybrid method that combines bisection and false position approaches.
-
-\textbf{Method Signature:}
-\begin{itemize}
-    \item \textbf{Input Parameters:}
-    \begin{itemize}
-        \item $f$ : Function to find root for
-        \item $[a, b]$ : Initial interval where $f(a)$ and $f(b)$ have opposite signs
-        \item $tol$ : Tolerance for convergence
-        \item $max\_iter$ : Maximum number of iterations
-    \end{itemize}
-    \item \textbf{Return Values:}
-    \begin{itemize}
-        \item $x$ : Root approximation
-        \item $f(x)$ : Function value at root
-        \item $[a, b]$ : Final interval containing root
-        \item $n$ : Number of iterations used
-    \end{itemize}
-\end{itemize}
-
-\textbf{Algorithm Operation:}
-\begin{enumerate}
-    \item Starts with initial interval $[a, b]$ where $f(a)$ and $f(b)$ have opposite signs
-    \item In each iteration:
-        \begin{itemize}
-            \item Performs a bisection step to find midpoint
-            \item Updates interval based on intermediate value theorem
-            \item Applies false position method for faster convergence
-            \item Updates interval again using false position estimate
-        \end{itemize}
-    \item Continues until either:
-        \begin{itemize}
-            \item Function value at current estimate is within tolerance
-            \item Maximum iterations reached
-        \end{itemize}
-\end{enumerate}
-
-The algorithm uses variables $f_a$ and $f_b$ for function values at endpoints, $mid$ for the midpoint, $fp$ for the false position estimate, and $f_{mid}$ and $f_{fp}$ for their respective function values.
+The Optimized Bisection-False Position (Optimized\_BF) algorithm is a hybrid root-finding method that combines the interval-halving reliability of the bisection method with the faster convergence of the false position (regula falsi) method. The algorithm starts with a function $f$ and an interval $[a, b]$ such that $f(a)$ and $f(b)$ have opposite signs, ensuring a root exists within the interval. It takes as input the function $f$, the interval $[a, b]$, a tolerance $tol$ for convergence, and a maximum number of iterations $max\_iter$. At each iteration, the algorithm first applies the bisection step to halve the interval, then uses the false position formula to accelerate convergence. The variables $f_a$ and $f_b$ represent the function values at the endpoints, $mid$ is the midpoint, $fp$ is the false position estimate, and $f_{mid}$ and $f_{fp}$ are their respective function values. The algorithm returns the root approximation $x$, the function value $f(x)$, and the final interval $[a, b]$.
 
 \vspace{1em}
 \begin{algorithm}[h!]
@@ -162,7 +125,7 @@ The algorithm uses variables $f_a$ and $f_b$ for function values at endpoints, $
 
 \subsubsection{Optimized Bisection-False Position with Modified Secant (Optimized\_BFMS)}
 
-The Optimized Bisection-False Position with Modified Secant (Optimized\_BFMS) algorithm extends the Optimized\_BF by incorporating a modified secant step for additional acceleration. It takes the same parameters as Optimized\_BF, with an additional small parameter $\delta$ for the secant step. The algorithm applies bisection and false position steps, and when appropriate, uses a modified secant formula to further refine the root estimate. The return values are the root approximation, the function value at the root, and the final interval.
+The Optimized Bisection-False Position with Modified Secant (Optimized\_BFMS) algorithm extends the Optimized\_BF approach by incorporating a modified secant step for additional acceleration. It takes as input the function $f$, the interval $[a, b]$, a tolerance $tol$, a maximum number of iterations $max\_iter$, and a small parameter $\delta$ for the secant approximation. The algorithm alternates between bisection, false position, and a modified secant step, which uses a finite difference to approximate the derivative and further speed up convergence. The variables $f_a$, $f_b$, $mid$, $fp$, $f_{mid}$, $f_{fp}$, and $x_S$ (the secant estimate) are used throughout. The algorithm returns the root approximation $x$, the function value $f(x)$, and the final interval $[a, b]$.
 
 \vspace{1em}
 \begin{algorithm}[h!]
@@ -212,7 +175,7 @@ The Optimized Bisection-False Position with Modified Secant (Optimized\_BFMS) al
 
 \subsubsection{Optimized Trisection-False Position (Optimized\_TF)}
 
-The Optimized Trisection-False Position (Optimized\_TF) algorithm uses trisection instead of bisection for potentially faster convergence. It takes as input a function $f$, an interval $[a, b]$, a tolerance $tol$, and a maximum number of iterations $max\_iter$. The algorithm divides the interval into three parts, evaluates the function at trisection points, and then applies the false position method to accelerate convergence. The return values are the root approximation, the function value at the root, and the final interval.
+The Optimized Trisection-False Position (Optimized\_TF) algorithm is a hybrid method that uses trisection instead of bisection for potentially faster interval reduction, combined with the false position method. It takes as input the function $f$, the interval $[a, b]$, a tolerance $tol$, and a maximum number of iterations $max\_iter$. At each iteration, the interval is divided into three parts, and the algorithm determines which subinterval contains the root. It then applies the false position formula to further accelerate convergence. The variables $f_a$, $f_b$, $x_1$, $x_2$ (trisection points), $f_{x_1}$, $f_{x_2}$, $fp$, and $f_{fp}$ are used. The algorithm returns the root approximation $x$, the function value $f(x)$, and the final interval $[a, b]$.
 
 \vspace{1em}
 \begin{algorithm}[h!]
@@ -258,7 +221,7 @@ The Optimized Trisection-False Position (Optimized\_TF) algorithm uses trisectio
 
 \subsubsection{Optimized Trisection-False Position with Modified Secant (Optimized\_TFMS)}
 
-The Optimized Trisection-False Position with Modified Secant (Optimized\_TFMS) algorithm combines trisection, false position, and a modified secant step. It takes the same parameters as Optimized\_TF, with an additional $\delta$ for the secant step. The algorithm alternates between trisection, false position, and modified secant steps to efficiently locate the root. The return values are the root approximation, the function value at the root, and the final interval.
+The Optimized Trisection-False Position with Modified Secant (Optimized\_TFMS) algorithm combines trisection, false position, and a modified secant step for even faster convergence. It takes as input the function $f$, the interval $[a, b]$, a tolerance $tol$, a maximum number of iterations $max\_iter$, and a small parameter $\delta$ for the secant step. The algorithm divides the interval into three, applies the false position method, and then uses a modified secant step to further refine the root estimate. The variables $f_a$, $f_b$, $x_1$, $x_2$, $f_{x_1}$, $f_{x_2}$, $fp$, $f_{fp}$, and $x_S$ (the secant estimate) are used. The algorithm returns the root approximation $x$, the function value $f(x)$, and the final interval $[a, b]$.
 
 \vspace{1em}
 \begin{algorithm}[h!]
