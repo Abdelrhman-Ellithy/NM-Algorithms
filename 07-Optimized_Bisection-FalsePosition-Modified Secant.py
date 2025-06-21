@@ -21,36 +21,34 @@ def rest_data():
             )""")
     con.commit()
     con.close()
-def record_speed(ID, methood,time ) :
-    con=sqlite3.connect('Results.db')
-    cursor=con.cursor()
-    cursor.execute('insert into results(problemId, method_name , CPU_Time) values (?,?,?)',( ID,methood,time ))
-    con.commit()
-    con.close()
-    
-def HtrisectionFalseMS(f, a, b, tol, max_iter=100, delta=1e-4):
-
+def record_speeds(records):
+    try:
+        with sqlite3.connect('Results.db') as con:
+            cursor = con.cursor()
+            cursor.executemany("INSERT INTO results (problemId, method_name, CPU_Time) VALUES (?, ?, ?)", records)
+            con.commit()
+    except sqlite3.Error as e:
+        print(f"Database error: {e}")
+def HbisectionFalseMS(f, a, b, tol, max_iter=100, delta=1e-4):
     fa, fb = f(a), f(b)
-    for n in range(1, max_iter + 1):
-        diff = b - a
-        x1 = a + diff/3
-        x2 = b - diff/3
-        fx1, fx2 = f(x1), f(x2)
-        if abs(fx1) <= tol: return n, x1, fx1, a, b
-        if abs(fx2) <= tol: return n, x2, fx2, a, b
-
-        if fa * fx1 < 0:
-            b, fb = x1, fx1
-        elif fx1 * fx2 < 0:
-            a, b, fa, fb = x1, x2, fx1, fx2
+    n = 0
+    while n < max_iter:
+        n += 1
+        mid = (a + b) * 0.5
+        fmid = f(mid)
+        
+        if fa * fmid < 0:
+            b, fb = mid, fmid
         else:
-            a, fa = x2, fx2
+            a, fa = mid, fmid
         try:
             dx = (a * fb) - (b * fa)
             fp = dx / (fb - fa )
             ffp = f(fp)
         except ZeroDivisionError:
-            continue
+            ffp = fmid
+            fp = mid
+
         if fa * ffp < 0:
             b, fb = fp, ffp
         else:
@@ -58,7 +56,7 @@ def HtrisectionFalseMS(f, a, b, tol, max_iter=100, delta=1e-4):
 
         if abs(ffp) <= tol:
             return n, fp, ffp, a, b
-            
+
         xS = fp - delta * ffp / (f(fp + delta) - ffp)
         if (a < xS< b):
             fxS = f(xS)
@@ -70,9 +68,8 @@ def HtrisectionFalseMS(f, a, b, tol, max_iter=100, delta=1e-4):
                 if abs(fxS) <= tol:
                     return n, xS, fxS, a, b
 
-    # Fallback to best estimate
     final_x = (a + b) * 0.5
-    return max_iter, final_x, f(final_x), a, b
+    return n, final_x, f(final_x), a, b
 
 # Define the symbolic variable x
 x = sp.Symbol('x')
@@ -93,20 +90,22 @@ dataset=[
          ,(x**2+2*x-7,1,3)
          ]
 tol = 1e-14
-method='Optimized_TFMS'
+method='07-Optimized-Bisection-FalsePosition-Modified Secant.py'
 print(method)
 rest_data()
 print("\t\tIter\t\t Root\t\tFunction Value\t\t Lower Bound\t\t Upper Bound\t\t Time")
-for i in range(0,len(dataset)) :
-    for c in range(0,100): 
-        t1=time.time() 
-        for j in range (0,100):    
-                f=dataset[i][0]
-                f = sp.lambdify('x', f)
-                a=dataset[i][1]
-                b=dataset[i][2]
-                n, x, fx, a, b = HtrisectionFalseMS(f, a, b, tol)
-        t2=time.time()
-        t=(t2-t1)
-        record_speed(i,method,t)
-        print(f"problem{i+1}| \t{n} \t {x:.16f} \t {fx:.16f} \t {a:.16f} \t {b:.16f} \t {t:.20f}")
+records = []
+for i, (func, a, b) in enumerate(dataset):
+    f = sp.lambdify('x', func)
+    for c in range(100):
+        t1 = time.perf_counter()
+        for j in range(100):
+            n, x_val, fx, a_val, b_val = HbisectionFalseMS(f, a, b, tol)
+        t2 = time.perf_counter()
+        t = t2 - t1
+        records.append((i+1, method, t))
+        print(f"problem{i+1}| \t{n} \t {x_val:.16f} \t {fx:.16f} \t {a_val:.16f} \t {b_val:.16f} \t {t:.20f}")
+
+# Batch insert all records at once
+if records:
+    record_speeds(records)

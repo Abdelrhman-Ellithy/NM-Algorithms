@@ -25,31 +25,32 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install sympy
+        pip install sympy numpy pandas
 
-    - name: Run BF scripts
+    - name: Run Python scripts
       run: |
-        python Old_BF.py
-        python Optimized_BF.py
-
-    - name: Run TF scripts
-      run: |
-        python Old_TF.py
-        python Optimized_TF.py
-        
-    - name: Run TFMS scripts
-      run: |
-        python Old_TFMS.py
-        python Optimized_TFMS.py
-
-    - name: Run BFMS scripts
-      run: |
-        python Old_BFMS.py
-        python Optimized_BFMS.py
+        for script in $(ls [0-9][0-9]-*.py); do
+          echo "Running $script..."
+          python "$script"
+          if [ $? -ne 0 ]; then
+            echo "Error running $script"
+            exit 1
+          fi
+        done
 
     - name: Verify results file
       run: |
-        ls -l 
+        if [ ! -f Results.db ]; then
+          echo "Results.db was not created!"
+          exit 1
+        fi
+        ls -l Results.db
+        file_size=$(stat -f%z Results.db || stat -c%s Results.db)
+        if [ "$file_size" -eq 0 ]; then
+          echo "Results.db is empty!"
+          exit 1
+        fi
+        echo "Results.db size: $file_size bytes"
 
     - name: Upload results database
       uses: actions/upload-artifact@v4

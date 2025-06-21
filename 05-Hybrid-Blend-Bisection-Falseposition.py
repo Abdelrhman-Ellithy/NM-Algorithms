@@ -19,16 +19,19 @@ def rest_data():
             )""")
     con.commit()
     con.close()
-def record_speed(ID, methood,time ) :
-    con=sqlite3.connect('Results.db')
-    cursor=con.cursor()
-    cursor.execute('insert into results(problemId, method_name , CPU_Time) values (?,?,?)',( ID,methood,time ))
-    con.commit()
-    con.close()
-def HtrisectionFalse(f, a, b, tol, max_iter=100):
+def record_speeds(records):
+    try:
+        with sqlite3.connect('Results.db') as con:
+            cursor = con.cursor()
+            cursor.executemany("INSERT INTO results (problemId, method_name, CPU_Time) VALUES (?, ?, ?)", records)
+            con.commit()
+    except sqlite3.Error as e:
+        print(f"Database error: {e}")
+    
+def blendBF(f, a, b, tol, max_iter=1000):
     """
-    This function implements the Bisection method to find a root of the
-    function (f) within the interval [a, b] with a given tolerance (tol).
+    This function implements the Hybrid Method of Bisection and False-Position to find
+    a root  of the function (f) within the interval [a, b] with a given tolerance (tol).
     
     Parameters:
         f   (function): The function for which we want to find a root.\n
@@ -47,52 +50,64 @@ def HtrisectionFalse(f, a, b, tol, max_iter=100):
     
     # Initialize the iteration counter
     n = 0
+    
+    # Define the bisection interval [a1, b1]
+    a1 = a
+    b1 = b
+    
+    # Define the false-position interval [a2, b2]
+    a2 = a
+    b2 = b
+    
     # Iterate until maximum iterations reached, or |f(x)| <= tol
     while n < max_iter:
         # Increment the iteration counter by 1
         n += 1
         
-        # Calculate the midpoint of the interval
-        # Calculate x1 and x2
-        x1 = (b + 2*a) / 3
-        x2 = (2*b + a) / 3
-        
-        # Calculate f(x1), f(x2) and f(a)
-        fx1 = f(x1)
-        fx2 = f(x2)
+        # Calculate f(a) and f(b)
         fa = f(a)
+        fb = f(b)
+        
+        # Calculate xB using the bisection method
+        xB = (a + b) / 2
+        fxB = f(xB)
+        
+        # Calculate xF using the false-position method
+        xF = (a*fb - b*fa) / (fb - fa)
+        fxF = f(xF)
         
         # Choose the root with the smaller error
-        if abs(fx1) < abs(fx2):
-            x = x1
-            fx = fx1
+        if abs(fxB) < abs(fxF):
+            x = xB
+            fx = fxB
         else:
-            x = x2
-            fx = fx2
+            x = xF
+            fx = fxF
         
         # Check if the absolute value of f(x) is smaller than the tolerance
         if abs(fx) <= tol:
             break
-        # Determine the new interval [a, b]
-        elif fa * fx1 < 0:
-            b = x1
-        elif fx1 * fx2 < 0:
-            a = x1
-            b = x2
+        
+        # Determine the new bisection interval [a1, b1]
+        if fa*fxB < 0:
+            b1 = xB
         else:
-            a = x2
-        fa=f(a)
-        fb=f(b)
-        x = (a*fb - b*fa) / (fb - fa)
-        fx = f(x)
-        if fa * fx < 0:
-            b = x
+            a1 = xB
+        
+        # Determine the new false-position interval [a2, b2]
+        if fa*fxF < 0:
+            b2 = xF
         else:
-            a = x
-        if abs(fx) <= tol:
-            break
+            a2 = xF
+        
+        # Take the intersection between [a1, b1] and [a2, b2]
+        a = max(a1, a2)
+        b = min(b1, b2)
+        
     # Return the number of iterations, estimated root, function value, lower bound, and upper bound
     return n, x, fx, a, b
+
+
 
 # Define the symbolic variable x
 x = sp.Symbol('x')
@@ -113,19 +128,22 @@ dataset=[
          ,(x**2+2*x-7,1,3)
          ]
 tol = 1e-14
+method='05-Hybrid-Blend-Bisection-Falseposition'
+print(method)
 rest_data()
-method="Old_TF"
 print("\t\tIter\t\t Root\t\tFunction Value\t\t Lower Bound\t\t Upper Bound\t\t Time")
-for i in range(0,len(dataset)) :
-    for c in range(0,100): 
-        t1=time.time() 
-        for j in range (0,100):    
-                f=dataset[i][0]
-                f = sp.lambdify('x', f)
-                a=dataset[i][1]
-                b=dataset[i][2]
-                n, x, fx, a, b = HtrisectionFalse(f, a, b, tol)
-        t2=time.time()
-        t=(t2-t1)
-        record_speed(i,method,t)
-        print(f"problem{i+1}| \t{n} \t {x:.16f} \t {fx:.16f} \t {a:.16f} \t {b:.16f} \t {t:.20f}")
+records = []
+for i, (func, a, b) in enumerate(dataset):
+    f = sp.lambdify('x', func)
+    for c in range(100):
+        t1 = time.perf_counter()
+        for j in range(100):
+            n, x_val, fx, a_val, b_val = blendBF(f, a, b, tol)
+        t2 = time.perf_counter()
+        t = t2 - t1
+        records.append((i+1, method, t))
+        print(f"problem{i+1}| \t{n} \t {x_val:.16f} \t {fx:.16f} \t {a_val:.16f} \t {b_val:.16f} \t {t:.20f}")
+
+# Batch insert all records at once
+if records:
+    record_speeds(records)

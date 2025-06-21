@@ -19,12 +19,14 @@ def rest_data():
             )""")
     con.commit()
     con.close()
-def record_speed(ID, methood,time ) :
-    con=sqlite3.connect('Results.db')
-    cursor=con.cursor()
-    cursor.execute('insert into results(problemId, method_name , CPU_Time) values (?,?,?)',( ID,methood,time ))
-    con.commit()
-    con.close()
+def record_speeds(records):
+    try:
+        with sqlite3.connect('Results.db') as con:
+            cursor = con.cursor()
+            cursor.executemany("INSERT INTO results (problemId, method_name, CPU_Time) VALUES (?, ?, ?)", records)
+            con.commit()
+    except sqlite3.Error as e:
+        print(f"Database error: {e}")
 # Define the bisection function
 def HbisectionFalse(f, a, b, tol, max_iter=100):
     fa, fb = f(a), f(b)
@@ -76,20 +78,22 @@ dataset=[
          ,(x**2+2*x-7,1,3)
          ]
 tol = 1e-14
-method='Optimized_BF'
+method='06-Optimized-Bisection-FalsePosition'
 print(method)
 rest_data()
 print("\t\tIter\t\t Root\t\tFunction Value\t\t Lower Bound\t\t Upper Bound\t\t Time")
-for i in range(0,len(dataset)) :
-    for c in range(0,100): 
-        t1=time.time() 
-        for j in range (0,100):    
-                f=dataset[i][0]
-                f = sp.lambdify('x', f)
-                a=dataset[i][1]
-                b=dataset[i][2]
-                n, x, fx, a, b = HbisectionFalse(f, a, b, tol)
-        t2=time.time()
-        t=(t2-t1)
-        record_speed(i,method,t)
-        print(f"problem{i+1}| \t{n} \t {x:.16f} \t {fx:.16f} \t {a:.16f} \t {b:.16f} \t {t:.20f}")
+records = []
+for i, (func, a, b) in enumerate(dataset):
+    f = sp.lambdify('x', func)
+    for c in range(100):
+        t1 = time.perf_counter()
+        for j in range(100):
+            n, x_val, fx, a_val, b_val = HbisectionFalse(f, a, b, tol)
+        t2 = time.perf_counter()
+        t = t2 - t1
+        records.append((i+1, method, t))
+        print(f"problem{i+1}| \t{n} \t {x_val:.16f} \t {fx:.16f} \t {a_val:.16f} \t {b_val:.16f} \t {t:.20f}")
+
+# Batch insert all records at once
+if records:
+    record_speeds(records)
