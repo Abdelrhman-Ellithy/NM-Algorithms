@@ -42,36 +42,23 @@ def false_position(f, a, b, tol):
     Returns:
         x (float): The estimated root of the function f within the interval [a, b].
     """
-    
-    # Initialize the iteration counter
     i = 0
-    
-    # Print the table header
-    print("i \t  a \t\t  x \t\t  b \t\t f(a) \t\t f(x) \t\t f(b)")
-
-    # Loop until the absolute value of f(x) is smaller than the tolerance
+    fx=0
     while True:
-        # Increment the iteration counter by 1
         i += 1
-        
-        # Calculate the new approximation using false position method
-        x = (a*f(b) - b*f(a)) / (f(b) - f(a))
-        #     0 --1/ -1--1 =0S
-        
-        # Print iteration number, current interval endpoints, function values at endpoints and midpoint
-        print(f"{i}\t{a:.6f}\t{x:.6f}\t{b:.6f}\t{f(a):.6f}\t{f(x):.6f}\t{f(b):.6f}")
-        
-        # Check if the absolute value of f(x) is smaller than the tolerance
-        if abs(f(x)) <= tol:
+        fa= f(a)
+        fb= f(b)
+        x = (a*fb - b*fa) / (fb - fa)
+        fx = f(x)
+        if abs(fx) <= tol:
             break
-        # Determine the new interval [a, b]
-        elif f(a) * f(x) < 0:
+        elif fa * fx < 0:
             b = x
         else:
             a = x
     
     # Return the estimated root
-    return x
+    return i, x, fx, a, b
 
 
 
