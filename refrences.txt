@@ -1,0 +1,438 @@
+ [1] A. Hasan, Numerical study of some iterative methods for solving
+ nonlinear equations, Int. J. Eng. Sci. Invent. 5 (2016) 1–10.
+ [2] A.Hasan,N.Ahmad,Compartivestudyofanewiterativemethod
+ withthatNewtonsMethodforsolvingalgebraicandtranscesental
+ equations, Int. J. Comput. Math. Sci. 4 (2015) 32–37.
+ [3] M.Q. Khirallah, M.A. Hafiz, Solving system of nonlinear
+ equations using family of jarratt methods. Int. J. Differ. Equ.
+ Appl. 2013, 12, 69–83. [CrossRef].
+ [4] C. Remani, Numerical Methods for Solving Systems of
+ Nonlinear Equations, Lakehead University, Thunder Bay,
+ ON, Canada, 2012, p. 13.
+ [5] C.H. Lally, A faster, high precision algorithm for calculating
+ symmetric and asymmetric. arXiv 2015, arXiv:1509.01831.
+ [6] J.C. Ehiwario, S.O. Aghamie, Comparative Study of Bisection,
+ Newton-Raphson and Secant Methods of Root-Finding
+ Problems, IOSR J. Eng. 4 (2014) 1–7.
+ [7] S. Ait-Aoudia, I. Mana, Numerical solving of geometric
+ constraints by bisection: A distributed approach, Int. J.
+ Comput. Inf. Sci. 2 (2004) 66.
+ [8] S. Baskar, S.S. Ganesh, Introduction to Numerical Analysis;
+ Department of Mathematics, Indian Institute of Technology
+ Bombay Powai, Mumbai, India, 2016.
+ [9] R.B. Srivastava, S. Srivastava, Comparison of numerical rate of
+ convergence of bisection, Newton and secant methods, J. Chem.
+ Biol. Phys. Sci. 2 (2011) 472–479.
+ [10] G. Moazzam, A. Chakraborty, A. Bhuiyan, A robust method
+ for solving transcendental equations, Int. J. Comput. Sci. Issues
+ 9 (2012) 413–419.
+11588
+ E. Badr et al.
+ [11] T. Nayak, T. Dash, Solution to quadratic equation using genetic
+ algorithm, in: Proceedings of the National Conference on
+ AIRES-2012, Vishakhapatnam, India, 29–30 June 2012.
+ [12] P. Mansouri, B. Asady, N. Gupta, The Bisection–Artificial Bee
+ Colony algorithm to solve Fixed point problems, Appl. Soft
+ Comput. 26 (2015) 143–148.
+ [13] D. Karaboga, B. Basturk, A powerful and efficient algorithm for
+ numerical function optimization: artificial bee colony (ABC)
+ algorithm, J Glob Optim 39 (3) (2007) 459–471.
+ [14] L.R. Burden, F.J. Douglas, Numerical Analysis, Prindle, Weber
+ & Schmidt, 3rd ed., Amazon, Seattle, WA, USA, 1 January
+ 1985.
+ [15] C.L. Sabharwal, Blended root finding algorithm outperforms
+ bisection and Regula Falsi Algorithms, Mathematics 7 (11)
+ (2019) 1118, https://doi.org/10.3390/math7111118.
+ [16] E. Badr, S. Almotairi, A.E. Ghamry, A comparative study
+ among new hybrid root finding algorithms and traditional
+ methods, Mathematics 9 (2021) 1306, https://doi.org/
+ 10.3390/math9111306.
+ [17] A. Aggarwal, S. Pant, Beyond Newton: A new root-finding
+ f
+ ixed-point iteration for nonlinear equations, Algorithms 13
+ (2020) 78, https://doi.org/10.3390/a13040078.
+ [18] J.M. Gutierrez, Numerical properties of different root-finding
+ algorithms obtained for approximating continuous Newton’s
+ method, Algorithms 8 (2015) 1210–1218, https://doi.org/
+ 10.3390/a8041210.
+ [19] Y.H. Hu, T. Emura, Maximum likelihood estimation for a
+ special exponential family under random double-truncation,
+ Comput. Stat. 30 (2015) 1199–1229, https://doi.org/10.1007/
+ s00180-015-0564-z.
+ [20] Iain L. MacDonald, Does Newton-Raphson really fail?, Statist
+ Methods Med. Res. 23 (3) (2014) 308–311.
+ [21] E. Badr, H. Elgendy, A hybrid water cycle-particle swarm
+ optimization for solving the fuzzy underground water confined
+ steady flow, Indones. J. Electr. Eng. Comput. Sci. 19 (2020) 492
+504. [CrossRef].
+ [22] E. Badr, S. Almotairi, M.A. Salam, H. Ahmed, New sequential
+ and parallel support vector machine with grey wolf optimizer for
+ breast cancer diagnosis, Alexandria Eng. J. 61 (3) (2022) 2520
+2534.
+ [23] E. Badr, M. Abdul Salam, S. Almotairi, H. Ahmed, R. Natella,
+ From linear programming approach to metaheuristic approach:
+ scaling techniques, Complexity 2021 (2021) 1–10.
+ [24] S.C. Chapra, R.P. Canale, Numerical Methods for Engineers,
+ 7th ed., McGraw-Hill, Boston, MA, USA, 2015.
+ [25] M. Heydari, S.M. Hosseini, G.B. Loghmani, On two new
+ families of iterative methods for solving nonlinear equations
+ with optimal order, Applicable Anal. Discrete Math. 5 (1) (2011)
+ 93–109.
+ [26] M. Heydari, S.M. Hosseini, G.B. Loghmani, Convergence of a
+ family of third-order methods free from second derivatives for
+ f
+ inding multiple roots of nonlinear equations, World Appl. Sci.
+ J. 11 (5) (2010) 507–512.
+ [27] M.M. Sehati, S.M. Karbassi, M. Heydari, G.B. Loghmani,
+ Several new iterative methods for solving nonlinear algebraic
+ equations incorporating homotopy perturbation method
+ (HPM), Int. J. Phys. Sci. 7 (27) (2012) 5017–5025.
+ [28] M. Heydari, G.B. Loghmani, Third-Order and Fourth-Order
+ Iterative Methods Free from Second Derivative for Finding
+ Multiple Roots of Nonlinear Equations, Caspian J. Math. Sci.
+ (CJMS) peer 3 (1) (2014) 67–85.
+ [29] H. Garg, A hybrid PSO-GA algorithm for constrained
+ optimization problems, Appl. Math. Comput. 274 (1)
+ (February 2016) 292–305.
+ [30] H. Garg, A hybrid GSA-GA algorithm for constrained
+ optimization problems, Inform. Sci. 478 (April 2019) 499–523.
+ [31] T. Kundu, H. Garg, A hybrid ITLHHO algorithm for
+ numericaland engineering optimization problems, Int. J. Intell.
+ Syst. 2021; 1–81. doi:10.1002/int.22707.
+ [32] D.W. Harder, Numerical Analysis for Engineering. Available
+ online:
+ https://ece.uwaterloo.ca/ \{\}dwharder/
+ NumericalAnaly-sis/ 10RootFinding/falseposition/ (accessed
+ on 11 June 2019).
+ [33] D. Calhoun, Available online: https://math.boisestate.edu/
+ \{\}calhoun/teaching/matlab- tutorials/lab_16/html/lab_16.html
+ (accessed on 13 June 2019).
+ [34] J.H. Mathews, K.D. Fink, Numerical Methods Using Matlab,
+ 4th ed., Prentice-Hall Inc., Upper Saddle River, NJ, USA, 2004.
+ [35] R.S. Esfandiari, Numerical Methods for Engineers and
+ Scientists Using MATLAB, CRC Press, Boca Raton, FL,
+ USA, 2013.
+ [36] D.H. Joe, Numerical Methods for Engineers and Scientists, 2nd
+ ed., CRC Press, Boca Raton, FL, USA, 2001.
+ [37] A. Demir, Trisection method by k-Lucas numbers, Appl. Math.
+ Comput. 198 (1) (2008) 339–345.
+ [38] V.K. Srivastav, S. Thota, M. Kumar, A new trigonometrical
+ algorithm for computing real root of non-linear transcendental
+ equations, Int. J. Appl. Comput. Math 5 (2) (2019), https://doi.
+ org/10.1007/s40819-019-0600-8.
+ [39] E.M. Badr, H. elgendy, A Hybrid water cycle- particle swarm
+ optimization for solving the fuzzy underground water confined
+ steady flow, Indonesian J. Electr. Eng. Comput. Sci. 19(1) 2020.
+ [40] D. Salama AbdELminaam, A.M. Almansori, M. Taha, E. Badr,
+ S. Mirjalili, A deep facial recognition system using
+ computational intelligent algorithms, PLoS ONE 15 (12)
+ (2020), https://doi.org/10.1371/journal.pone.0242269.
+ [41] Elsayed Badr, Mustafa Abdul Salam, Sultan Almotairi, Hagar
+ Ahmed, From linear programming approach to metaheuristic
+ approach: scaling techniques, Complexity vol. 2021, Article ID
+ 9384318, 10 pages, 2021.
+ [42] K. Jain, A. Saxena, Simulation on supplier side bidding strategy
+ at day-ahead electricity market using ant lion optimizer, J.
+ Computat. Cognit. Eng. 00 (00) (2022) 1–12.
+ [43] Jie Zan, Research on robot path perception and optimization
+ technology based on whale optimization algorithm, J.
+ Computat. Cognit. Eng. Vol. 00(00) (2022) 1–8.
+
+ References
+ 1.
+ 2.
+ 3.
+ 4.
+ 5.
+ 6.
+ 7.
+ 8.
+ 9.
+ Hasan, A. Numerical Study of Some Iterative Methods for Solving Nonlinear Equations. Int. J. Eng. Sci. Invent. 2016, 5, 1–10.
+ Hasan, A.; Ahmad, N. Compartive study of a new iterative method with that Newtons Method for solving algebraic and
+ transcesental equations. Int. J. Comput. Math. Sci. 2015, 4, 32–37.
+ Khirallah, M.Q.; Hafiz, M.A. Solving system of nonlinear equations using family of jarratt methods. Int. J. Differ. Equ. Appl. 2013,
+ 12, 69–83. [CrossRef]
+ Remani, C. Numerical Methods for Solving Systems of Nonlinear Equations; Lakehead University: Thunder Bay, ON, Canada, 2012; p. 13.
+ Lally, C.H. A faster, high precision algorithm for calculating symmetric and asymmetric. arXiv 2015, arXiv:1509.01831.
+ Ehiwario, J.C.; Aghamie, S.O. Comparative Study of Bisection, Newton-Raphson and Secant Methods of Root-Finding Problems.
+ IOSR J. Eng. 2014, 4, 1–7.
+ Ait-Aoudia, S.; Mana, I. Numerical solving of geometric constraints by bisection: A distributed approach. Int. J. Comput. Inf. Sci.
+ 2004, 2, 66.
+ Baskar, S.; Ganesh, S.S. Introduction to Numerical Analysis; Department of Mathematics, Indian Institute of Technology Bombay
+ Powai: Mumbai, India, 2016.
+ Srivastava, R.B.; Srivastava, S. Comparison of numerical rate of convergence of bisection, Newton and secant methods. J. Chem.
+ Biol. Phys. Sci. 2011, 2, 472–479.
+ 10. Moazzam,G.; Chakraborty, A.; Bhuiyan, A. A robust method for solving transcendental equations. Int. J. Comput. Sci. Issues 2012,
+ 9, 413–419.
+ 11. Nayak, T.; Dash, T. Solution to quadratic equation using genetic algorithm. In Proceedings of the National Conference on
+ AIRES-2012, Vishakhapatnam, India, 29–30 June 2012.
+ 12. Mansouria, P.; Asadya, B.; Guptab, N. The Bisection–Artificial Bee Colony algorithm to solve fixed point problems. Appl. Soft Comput.
+ 2015, 26, 143–148. [CrossRef]
+ 13. Karaboga, D.; Basturk, B. A powerful and efficient algorithm for numerical func-tion optimization: Artificial Bee Colony (ABC)
+ algorithm. J. Glob. Optim. 2007, 39, 459–471. [CrossRef]
+ 14. Burden, L.R.; Douglas, F.J. Numerical Analysis, Prindle, Weber & Schmidt, 3rd ed.; Amazon: Seattle, WA, USA, 1 January 1985.
+ 15. Sabharwal, C.L. Blended Root Finding Algorithm Outperforms Bisection and Regula Falsi Algorithms. Mathematics 2019, 7, 1118.
+ [CrossRef]
+ 16. Badr, E.M.; Elgendy, H. A hybrid water cycle-particle swarm optimization for solving the fuzzy underground water confined
+ steady flow. Indones. J. Electr. Eng. Comput. Sci. 2020, 19, 492–504. [CrossRef]
+ 17. Chapra, S.C.; Canale, R.P. Numerical Methods for Engineers, 7th ed.; McGraw-Hill: Boston, MA, USA, 2015.
+ 18. Harder,D.W.Numerical Analysis for Engineering. Available online: https://ece.uwaterloo.ca/~{}\{\}dwharder/NumericalAnaly-sis/
+ 10RootFinding/falseposition/ (accessed on 11 June 2019).
+ 19. Calhoun,D.Availableonline: https://math.boisestate.edu/~{}\{\}calhoun/teaching/matlab-tutorials/lab_16/html/lab_16.html
+ (accessed on 13 June 2019).
+ 20. Mathews, J.H.; Fink, K.D. Numerical Methods Using Matlab, 4th ed.; Prentice-Hall Inc.: Upper Saddle River, NJ, USA, 2004;
+ ISBN 0-13-065248-2.
+ 21. Esfandiari, R.S. Numerical Methods for Engineers and Scientists Using MATLAB; CRC Press: Boca Raton, FL, USA, 2013.
+ 22. Joe, D.H. Numerical Methods for Engineers and Scientists, 2nd ed.; CRC Press: Boca Raton, FL, USA, 2001
+
+ References
+ 1.
+ 2.
+ 3.
+ 4.
+ 5.
+ 6.
+ 7.
+ 8.
+ 9.
+ Datta, B.N. Lecture Notes on Numerical Solution of Root Finding Problems. 2012. Available online:
+ www.math.niu.edu/~{}dattab (accessed on 15 January 2019).
+ Calhoun, D. Available online: https://math.boisestate.edu/~{}calhoun/teaching/matlab-tutorials/lab_16/html/
+ lab_16.html (accessed on 13 June 2019).
+ Thinzar, C.; Aye, N. Detection the storm movement by sub pixel registration approach of Newton Raphson
+ method. Int. J. E Educ. E Bus. E Manag. E Learn. 2014, 4, 28–31.
+ Ali, A.J.M. The application of numerical approximation methods upon digital images. Am. J. Signal Process.
+ 2017, 7, 39–43. [CrossRef]
+ Bruck, H.A.; McNeill, S.R.; Sutton, M.A.; Peters, W.H. Digital image correlation using Newton-Raphson
+ method of partial di erential correction. Exp. Mech. 1989, 29, 261–267. [CrossRef]
+ Cofaru, C.; Philips, W.; van Paepegem, W. Pixel-level robust digital image correlation. Opt. Express 2013, 21,
+ 29979–29999. [CrossRef] [PubMed]
+ Chapra, S.C.; Canale, R.P. Numerical Methods for Engineers, 7th ed.; McGraw-Hill Publishers: Boston, MA,
+ USA, 2015.
+ Autar, K.K.; Egwu, E. Numerical Methods with Applications. 2008. Available online: http://www.
+ numericalmethods.eng.usf.edu (accessed on 20 February 2019).
+ Wolfram Mathematica. Available online: http://www.efunda.com/math/num_rootfinding-cfm (accessed on
+ 15 February 2014).
+ 10. Charles, A.; Cooper, W.W. Non-linear power of adjacent extreme points methods in linear programming.
+ Econometrica 2008, 25, 132–153. [CrossRef]
+ 11. Young, H.D.; Freedman, R.A. University Physics with Modern Physics, 11th ed.; Addison Wesley: Boston, MA,
+ USA, 2004.
+ 12. Srivastava, R.B.; Srivastava, S. Comparison of numerical rate of convergence of bisection, Newton and secant
+ methods. J. Chem. Biol. Phys. Sci. 2011, 2, 472–479.
+ 13. Iwetan, C.N.; Fuwape, I.A.; Olajide, M.S.; Adenodi, R.A. Comparative study of the bisection and Newton
+ methods in solving for zero and extremes of a single-variable function. J. NAMP 2012, 21, 173–176.
+ 14. Ehiwario, J.C.; Aghamie, S.O. Comparative study of bisection, Newton-Raphson and secant methods
+ of root-finding problems. IOSR J. Eng. 2014, 4, 2278–8719.
+ 15. Sivanandam, S.; Deepa, S. Genetic algorithm implementation using matlab. In Introduction to Genetic
+ Algorithms; Springer: Berlin/Heidelberg, Germany, 2008; pp. 211–262. [CrossRef]
+ 16. Moazzam,G.; Chakraborty, A.; Bhuiyan, A. A robust method for solving transcendental equations. Int. J.
+ Comput. Sci. Issues 2012, 9, 413–419.
+ 17. Harder, D.W. Numerical Analysis for Engineering. Available online: https://ece.uwaterloo.ca/~{}dwharder/
+ NumericalAnalysis/10RootFinding/falseposition/ (accessed on 11 June 2019).
+ 18. Mathews, J.H.; Fink, K.D. Numerical Methods Using Matlab, 4th ed.; Prentice-Hall Inc.: Upper Saddle River,
+ NJ, USA, 2004; ISBN 0-13-065248-2.
+ 19. Nayak, T.; Dash, T. Solution to quadratic equation using genetic algorithm. In Proceedings of the National
+ Conference on AIRES-2012, Vishakhapatnam, India, 29–30 June 2012.
+
+ 
+References 
+[1]. 
+[2]. 
+Datta, B.N. Lecture Notes on Numerical Solution of Root Finding Problems. 2012. Available online: 
+www.math.niu.edu/~dattab
+ (accessed on 15 January 2019). 
+Calhoun, 
+D. 
+Available 
+https://math.boisestate.edu/~calhoun/teaching/matlab-tutorials/lab_16/html/lab_16.html
+ 13 June 2019). 
+[3]. 
+online: 
+(accessed on 
+Thinzar, C.; Aye, N. Detection the storm movement by sub pixel registration approach of Newton 
+Raphson method. Int. J. E Educ. E Bus. E Manag. E Learn. 2014, 4, 28–31. 
+[4]. 
+[5]. 
+[6]. 
+[7]. 
+T. J. Dekker and W. Hoffmann (part 2), Algol 60 Procedures in Numerical Algebra, Parts 1 and 2, 
+Tracts 22 and 23, Mathematisch Centrum Amsterdam, 1968. 
+Dekker, T. J.
+ (1969), "Finding a zero by means of successive linear interpolation", in Dejon, B.; 
+Henrici, P. (eds.), Constructive Aspects of the Fundamental Theorem of Algebra, London: 
+Wiley-Interscience, ISBN
+ 978-0-471-20300-1https://en.wikipedia.org/wiki/Brent%27s_method#Dekke
+ r's_method
+ Brent’s Method  https://en.wikipedia.org/wiki/Brent%27s_method#Dekker's_method (accessed 12 
+December 12,2019
+ Press, W. H.; Teukolsky, S. A.; Vetterling, W. T.; Flannery, B. P. (2007). "Van 
+Wijngaarden–Dekker–Brent Method"
+ . Numerical Recipes: The Art of Scientific Computing (3rd ed.). 
+New York: Cambridge University Press. ISBN
+ 978-0-521-88068-8
+ .   
+www.ijlret.com                               
+14 | Page 
+International Journal of Latest Research in Engineering and Technology (IJLRET) 
+ISSN: 2454-5031  
+www.ijlret.com || Volume 05 - Issue 12 || December 2019 || PP. 01-15 
+[8]. 
+[9]. 
+[10]. 
+[11]. 
+[12]. 
+[13]. 
+[14]. 
+[15]. 
+[16]. 
+[17]. 
+[18]. 
+[19]. 
+[20]. 
+Sivanandam, S.; Deepa, S. Genetic algorithm implementation using matlab. In Introduction to Genetic 
+Algorithms; Springer: Berlin/Heidelberg, Germany, 2008; pp. 211–262, doi: 10.1007/978-3-540-73190-0_8. 
+Moazzam, G.; Chakraborty, A.; Bhuiyan, A. A robust method for solving transcendental equations.Int. 
+J. Comput. Sci. Issues 2012, 9, 413–419. 
+Gerald W. Recktenwald,  
+Finding the Roots of f x) = 0 - Computer Action Team
+ web.cecs.pdx.edu/~gerry/nmm/course/slides/ch06Slides.pdf (accessed 1 December 2019)   
+Chapra, S.C.; Canale, R.P. Numerical Methods for Engineers, 7th ed.; McGraw-Hill Publishers: 
+Boston, MA, USA, 2015. 
+Mathews, J.H.; Fink, K.D. Numerical Methods Using Matlab, 4th ed.; Prentice-Hall Inc.: Upper Saddle 
+River, NJ, USA, 2004; ISBN 0-13-065248-2. 
+Nayak, T.; Dash, T. Solution to quadratic equation using genetic algorithm. In Proceedings of the 
+National Conference on AIRES-2012, Vishakhapatnam, India, 29–30 June 2012. 
+Srivastava, R.B.; Srivastava, S. Comparison of numerical rate of convergence of Bisection, Newton 
+and Secant methods. J. Chem. Biol. Phys. Sci. 2011, 2, 472–479. 
+Ehiwario, J.C.; Aghamie, S.O.; Comparative study of Bisection, Newton-Raphson and Secant methods 
+of root-finding problems. IOSR J. Eng. 2014, 4, 2278–8719. 
+Halley at Wikipedia  
+(accessed 12 November 2019) 
+https://en.wikipedia.org/wiki/Halley%27s_method#Cubic_convergence
+ Halley's method - Wikipediahttps://en.wikipedia.org/wiki/Halley's_method
+ (accessed 22 December 
+2019) 
+Iwetan, C.N.; Fuwape, I.A.; Olajide, M.S.; Adenodi, R.A. Comparative study of the Bisection and 
+Newton methods in solving for zero and extremes of a single-variable function. J. NAMP 2012, 21, 
+173–176. 
+Azizul Hasan, R.B.Srivastava, Najmuddin Ahmad, An Improved Method Based on Cubic Spline 
+Functions for solving Non-linear Equations, Journal of Chemical, Biological, and Physical 
+Sciences,p.528-537, Jan 2014. (accessed on 11 June 2019). 
+Harder, 
+D.W. 
+Numerical 
+Analysis 
+for 
+https://ece.uwaterloo.ca/~dwharder/NumericalAnalysis/10RootFinding/falseposition/
+ June 2019). 
+References 
+1. Steven C Chapra and Raymond P Canale, Numerical Methods for Engineers, 7th Edition, McGraw-Hill Publishers, 
+2015.  
+2. John H. Mathews and Kurtis K. Fink Numerical Methods Using Matlab, 4th Edition, 2004 ISBN: 0-13-065248-2 
+Prentice-Hall Inc. Upper Saddle River, New Jersey, USA 
+3. 
+doi:10.20944/preprints202312.2108.v1
+ 19 
+J. F. Traub: Iterative Methods for the Solution of Equations, Chelsea Publishing company, New York, NY, USA, 
+1982. 
+4. 
+5. 
+6. 
+7. 
+8. 
+9. 
+Douglas Wilhelm Harder, https://ece.uwaterloo.ca/~dwharder/NumericalAnalysis/10RootFinding/falseposition/, 
+accessed Jun 2019. 
+Ehiwario, J.C., Aghamie, S.O.; Comparative Study of Bisection, Newton-Raphson and Secant Methods of Root- 
+Finding Problems; IOSR Journal of Engineering (IOSRJEN) www.iosrjen.org; ISSN (e): 2250-3021, ISSN (p): 2278
+8719; Vol. 04, Issue 04 (April. 2014), ||V1|| PP 01-07. 
+Donna Calhoun https://math.boisestate.edu/~calhoun/teaching/matlab-tutorials/lab_16/html/lab_16.html accessed 
+December 2023 
+C. Thinzar, and N. Aye, "Detection the storm movement by sub pixel registration approach of Newton Raphson 
+method" International Journal of e-Education, e-Business, e-Management and e-Learning, Vol. 4, No. 1, 2014.  
+S. Sapna, Biju R. Mohan, Comparative Analysis of Root Finding Algorithms for Implied Volatility Estimation of 
+Ethereum Options, Computational Economics, https://doi.org/10.1007/s10614-023-10446-8, springer, August, 2023, 
+pp.1-37.  
+G. Moazzam, A. Chakraborty, A. Bhuiyan: A robust method for solving transcendental equations. Int. J. Comput. Sci., 
+9 (2012), 413–419. 
+10. Sabharwal, C. L. (2019). Blended root finding algorithm outperforms bisection and regula falsi algorithms. 
+Mathematics, 7(11), 1118. 
+11. Badr, E., Almotairi, S., & Ghamry, A. E. (2021). A comparative study among new hybrid root finding algorithms and 
+traditional methods. Mathematics, 9(11), 1306.  
+12. Srinivasarao, Thota A Blended Root-Finding Algorithm for Solving Transcendental Equations SNAPP, International 
+Journal of Applied and Computational Mathematics, https://doi.org/10.21203/rs.3.rs-2956091/v1,  May 2023, pp.1
+9 
+Collins 
+13. Occam’Razor: https://conceptually.org/concepts/occams-razor, accessed December 2023. 
+14. G.E. 
+and 
+A.G. 
+Akritas  
+Trisection 
+https://www.lamath.org/journal/Vol1/trisection_using_bisection.pdf, 1976. 
+using 
+Bisection, 
+15. Srivastava, R.B and Srivastava, S (2011), Comparison of Numerical Rate of Convergence of Bisection, Newton and 
+Secant Methods. Journal of Chemical, Biological and Physical Sciences.Vol 2(1) pp 472-479, 2011. 
+16. Wikipedia https://en.wikipedia.org/wiki/False_position_method#Two_historical_types accessed December 2023.  
+ References
+ 1.
+ 2.
+ 3.
+ 4.
+ 5.
+ 6.
+ 7.
+ 8.
+ 9.
+ Dekker, T.J.; Hoffmann, W. Algol 60 Procedures in Numerical Algebra, Parts 1 and 2; Tracts 22 and 23; Mathematisch Centrum:
+ Amsterdam, The Netherlands, 1968.
+ Dekker, T.J. Finding a zero by means of successive linear interpolation. In Constructive Aspects of the Fundamental Theorem of
+ Algebra; Dejon, B., Henrici, P., Eds.; Wiley-Interscience: London, UK, 1969; ISBN 978-0-471-20300-1. Available online: https:
+ //en.wikipedia.org/wiki/Brent%27s_method#Dekker\T1\textquoterights_method (accessed on 3 March 2021).
+ Brent’s Method. Available online: https://en.wikipedia.org/wiki/Brent%27s_method#Dekker\T1\textquoterights_method
+ (accessed on 12 December 2019).
+ Press, W.H.; Teukolsky, S.A.; Vetterling, W.T.; Flannery, B.P. Van Wijngaarden–Dekker–Brent Method. In Numerical Recipes: The
+ Art of Scientific Computing, 3rd ed.; Cambridge University Press: New York, NY, USA, 2007; ISBN 978-0-521-88068-8.
+ Sivanandam, S.; Deepa, S. Genetic algorithm implementation using matlab. In Introduction to Genetic Algorithms; Springer:
+ Berlin/Heidelberg, Germany, 2008; pp. 211–262. [CrossRef]
+ Moazzam, G.; Chakraborty, A.; Bhuiyan, A. A robust method for solving transcendental equations. Int. J. Comput. Sci. Issues 2012,
+ 9, 413–419.
+ Oghovese, O.; John, E.O. New Three-Steps Iterative Method for Solving Nonlinear Equations. IOSR J. Math. (IOSR-JM) 2014, 10,
+ 44–47. [CrossRef]
+ Fitriyani, N.; Imran, M.; Syamsudhuha, A. Three-Step Iterative Method to Solve a Nonlinear Equation via an Undetermined
+ Coefficient Method. Glob. J. Pure Appl. Math. 2018, 14, 1425–1435.
+ Darvishi, M.T.; Barati, A. A third-oredr Newton-type method to solve system of nonlinear equations. Appl. Math. Comput. 2007,
+ 187, 630–635
+10. Weerakoon, S.; Fernando, T.G.I. A variant of Newton’s method with accelerated third-order convergence. Appl. Math. Lett. 2000,
+ 13, 87–93. [CrossRef]
+ 11. Khattri, S.K.; Abbasbandy, S. Optimal Fourth Order Family of Iterative Methods. Mat. Vesn. 2011, 63, 67–72.
+ 12. Ostrowski, A.M. Solutions of Equations and System of Equations; Academic Press: New York, NY, USA; London, UK, 1966.
+ 13. Cordero, A.; Torregrosa, J.R. Variants of Newton’s Method using fifth-order quadrature formulas. Appl. Math. Comput. 2007, 190,
+ 686–698. [CrossRef]
+ 14. Jayakumar, J. Generalized Simpson-Newton’s Method for Solving Nonlinear Equations with Cubic Convergence. IOSR J. Math.
+ (IOSR-JM) 2013, 7, 58–61. [CrossRef]
+ 15. Sabharwal, C.L. Blended Root Finding Algorithm Outperforms Bisection and Regula Falsi Algorithms. Mathematics 2019, 7, 1118.
+ [CrossRef]
+ 16. Chun,C.Iterative method improving Newton’s method by the decomposition method. Comput. Math. Appl. 2005, 50, 1559–1568.
+ [CrossRef]
+ 17. Hasanov, V.I.; Ivanov, I.G.; Nedjibov, G. A new modification of Newton’s method. Appl. Math. Eng. 2002, 27, 278–286.
+ 18. Singh, M.K.; Singh, A.K. A Six-Order Method for Non-Linear Equations to Find Roots. Int. J. Adv. Eng. Res. Dev. 2017, 4, 587–592.
+ 19. Osinuga1, I.A.; Yusuff, S.O. Quadrature based Broyden-like method for systems of nonlinear equations. Stat. Optim. Inf. Comput.
+ 2018, 6, 130–138. [CrossRef]
+ 20. Babajee, D.K.R.; Dauhoo, M.Z. An analysis of the properties of the variants of Newton’s method with third order convergence.
+ Appl. Math. Comput. 2006, 183, 659–684. [CrossRef]
+ 21. Grau, M.; Diaz-Barrero, J.L. An Improvement to Ostrowski Root-Finding Method. Appl. Math. Comput. 2006, 173, 450–456.
+ [CrossRef]
+ 22. Sharma, J.R.; Guha, R.K. A Family of Modified Ostrowski Methods with Accelerated Sixth Order Convergence. Appl. Math.
+ Comput. 2007, 190, 111–115. [CrossRef]
+ 23. Fang, L.; Chen, T.; Tian, L.; Sun, L.; Chen, B. A Modified Newton-Type Method with Sixth-Order Convergence for Solving
+ Nonlinear Equations. Procedia Eng. 2011, 15, 3124–3128. [CrossRef]
+ 24. Halley at Wikipedia. Available online: https://en.wikipedia.org/wiki/Halley%27s_method#Cubic_convergence (accessed on 22
+ December 2019).
+ 25. Newton. Philosophiae Naturalis Principia Mathematica; Sumptibus Cl. et Ant. Philibert: Geneva, Switzerland, 1760.
+ 26. Ortega, J.M.; Rheinboldt, W.C. Iterative Solutions of Nonlinear Equations in Several Variables; Academic Press: New York, NY, USA,
+ 1970.
+ 27. Santra, S.S.; Ghosh, T.; Bazighifan, O. Explicit criteria for the oscillation of second-order differential equations with several
+ sub-linear neutral coefficients. Adv. Diff. Equ. 2020, 2020, 643. [CrossRef]
