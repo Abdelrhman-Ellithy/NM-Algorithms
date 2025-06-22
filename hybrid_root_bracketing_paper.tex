@@ -445,10 +445,10 @@ Algorithm & Avg CPU Time (s) & Avg Iterations \\
 09-Optimized-Trisection-FalsePosition-Modified Secant & 0.00119 & 2.86 \\
 06-Optimized-Bisection-FalsePosition & 0.00134 & 3.07 \\
 08-Optimized-Trisection-FalsePosition & 0.00150 & 3.07 \\
-04-Hybrid-Blend-Trisection-Falseposition & 0.00232 & 2.86 \\
-05-Hybrid-Blend-Bisection-Falseposition & 0.00229 & 3.07 \\
-02-Normal-FalsePosition & 0.00448 & 46.93 \\
-03-Trisection & 0.00501 & 46.93 \\
+04-Hybrid-Blend-Trisection-Falseposition & 0.00232 & 6.00 \\
+05-Hybrid-Blend-Bisection-Falseposition & 0.00229 & 7.29 \\
+02-Normal-FalsePosition & 0.00448 & 32.57 \\
+03-Trisection & 0.00501 & 24.93 \\
 01-Normal-Bisection & 0.00529 & 46.93 \\
 \bottomrule
 \end{tabular}
@@ -468,9 +468,9 @@ Table \ref{tab:detailed_results} provides a detailed breakdown of iteration coun
 
 \begin{table}[H]
 \centering
-\caption{Detailed Iteration Counts for Each Test Problem. This table presents the number of iterations required by each algorithm to converge for every test problem, based on Results.xlsx.}
+\caption{Detailed Iteration Counts for Each Test Problem. This table presents the number of iterations required by each algorithm to converge for every test problem, based on the collected data.}
 \label{tab:detailed_results}
-\begin{tabular}{lcccccccccc}
+\begin{tabular}{lccccccccc}
 \toprule
 Problem & Bisection & False Position & Trisection & Blend BF & Blend TF & Opt-BF & Opt-TF & Opt-BFMS & Opt-TFMS \\
 \midrule
@@ -547,6 +547,58 @@ Each hybrid algorithm demonstrates unique performance characteristics that contr
 \textbf{Optimized\_BF and Optimized\_TF:} These algorithms provide intermediate performance, offering significant improvements over traditional methods while maintaining the simplicity of two-phase approaches.
 
 The experimental results confirm that the hybrid approach successfully addresses the fundamental trade-off between convergence speed and reliability in numerical root finding, providing algorithms that are both faster and more robust than traditional methods.
+
+% --- Add figures for performance plots ---
+
+% Average CPU time per algorithm
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{avg_cpu_time_per_algorithm.png}
+    \caption{Average CPU time per algorithm. Lower values indicate higher computational efficiency.}
+    \label{fig:avg_cpu_time_per_algorithm}
+\end{figure}
+
+As shown in Figure~\ref{fig:avg_cpu_time_per_algorithm}, the proposed hybrid algorithms achieve significantly lower average CPU times compared to traditional methods, demonstrating their superior computational efficiency.
+
+% CPU time per problem for each algorithm
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{cpu_time_lineplot_per_problem.png}
+    \caption{CPU time per problem for each algorithm. This plot shows the consistency and variability of each method across all test problems.}
+    \label{fig:cpu_time_lineplot_per_problem}
+\end{figure}
+
+Figure~\ref{fig:cpu_time_lineplot_per_problem} illustrates the CPU time for each algorithm across all test problems, highlighting the consistency and robustness of the hybrid methods.
+
+% Overall average CPU time per algorithm
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{avg_cpu_time_lineplot_overall.png}
+    \caption{Overall average CPU time per algorithm across all problems.}
+    \label{fig:avg_cpu_time_lineplot_overall}
+\end{figure}
+
+Figure~\ref{fig:avg_cpu_time_lineplot_overall} provides an overall comparison of average CPU time, further confirming the efficiency of the hybrid approaches.
+
+% Fastest algorithm per problem
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{fastest_algorithm_per_problem_lineplot.png}
+    \caption{Fastest algorithm for each problem, based on minimum CPU time.}
+    \label{fig:fastest_algorithm_per_problem}
+\end{figure}
+
+Figure~\ref{fig:fastest_algorithm_per_problem} shows which algorithm is the fastest for each problem, demonstrating the consistent superiority of the hybrid methods.
+
+% Top 3 fastest algorithms per problem
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{top3_fastest_algorithms_lineplot.png}
+    \caption{CPU time per problem for the top 3 fastest algorithms.}
+    \label{fig:top3_fastest_algorithms}
+\end{figure}
+
+Figure~\ref{fig:top3_fastest_algorithms} compares the CPU time per problem for the top three fastest algorithms, highlighting their performance across the test suite.
 
 \section{Conclusion}
 
