@@ -1,271 +1,649 @@
-\documentclass[reprint, amsmath, amssymb, aps, prl]{revtex4-2}
-
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amsfonts,amssymb}
 \usepackage{graphicx}
-\usepackage{dcolumn}
-\usepackage{bm}
 \usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{geometry}
 \usepackage{hyperref}
+\usepackage{float}
 \usepackage{algorithm}
-\usepackage{algpseudocode}
+\usepackage{algorithmic}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{times}
 
-\hypersetup{
-    colorlinks=true,
-    linkcolor=blue,
-    filecolor=magenta,      
-    urlcolor=cyan,
+\geometry{margin=0.75in}
+\linespread{0.97}
+\setlength{\parskip}{0pt}
+\setlength{\parindent}{1em}
+\renewcommand{\arraystretch}{1.1}
+
+% Compact section headings
+\usepackage[compact]{titlesec}
+\titlespacing*{\section}{0pt}{1.2ex plus .2ex minus .2ex}{0.8ex plus .1ex}
+\titlespacing*{\subsection}{0pt}{1.0ex plus .2ex minus .2ex}{0.6ex plus .1ex}
+\titlespacing*{\subsubsection}{0pt}{0.8ex plus .2ex minus .2ex}{0.4ex plus .1ex}
+
+\title{\textbf{Four New Hybrid Root Bracketing Algorithms: Optimization-Based Approaches for Numerical Root Finding}}
+\author{
+    Abdelrahman Ellithy$^{1}$ 
 }
+\date{\today}
 
 \begin{document}
 
-\preprint{APS/123-QED}
-
-\title{Four New Hybrid Root-Finding Algorithms: An Optimization-Based Approach}
-
-\author{Abdelrahman Ellithy}
- \email{abdelrahman.ellithy@example.com}
-\affiliation{Department of Computer Science, Faculty of Science, Ain Shams University, Cairo, Egypt}
-
-\author{Ahmed Shalaby}
-\affiliation{Department of Computer Science, Faculty of Science, Ain Shams University, Cairo, Egypt}
-
-\author{Elsayed Badr}
-\affiliation{Department of Mathematics, Faculty of Science, Zagazig University, Zagazig, Egypt}
-
-\date{\today}
-
-\begin{abstract}
-This paper introduces four novel hybrid root-finding algorithms designed to efficiently solve nonlinear equations of the form $f(x) = 0$. Traditional bracketing methods guarantee convergence but can be slow, while open methods offer speed but may fail to converge. Our proposed algorithms bridge this gap by combining the robustness of bracketing methods (Bisection, Regula Falsi) with the speed of a fast two-point iterative step based on the Thota method concept. The four hybrid strategies are: Hybrid Bisection-Thota (HBT), Hybrid Regula Falsi-Thota (HRFT), and two adaptive variants, Adaptive Hybrid Bisection-Thota (AHBT) and Adaptive Hybrid Regula Falsi-Thota (AHRFT). We conduct a comprehensive experimental study, comparing our algorithms against each other and against their parent methods using a suite of 25 benchmark nonlinear problems. Performance is evaluated based on CPU execution time. The results demonstrate that the proposed hybrid algorithms, particularly the adaptive variants, consistently outperform the traditional methods, offering a superior balance of speed and reliability. The AHRFT algorithm is identified as the most consistently efficient method across the majority of test cases.
-\end{abstract}
-
 \maketitle
 
+\begin{abstract}
+This paper presents four novel hybrid root bracketing algorithms that combine the advantages of traditional bracketing methods with optimization techniques. The proposed algorithms—Optimized Bisection-False Position (Optimized\_BF), Optimized Bisection-False Position with Modified Secant (Optimized\_BFMS), Optimized Trisection-False Position (Optimized\_TF), and Optimized Trisection-False Position with Modified Secant (Optimized\_TFMS)—demonstrate improved convergence rates and computational efficiency compared to their traditional counterparts. Through extensive experimentation on 14 diverse test functions using the SymPy library, our algorithms show consistent performance improvements, with Optimized\_BFMS achieving the best overall performance. The hybrid approach leverages the reliability of bracketing methods while incorporating the speed advantages of optimization-based techniques, making these algorithms suitable for a wide range of numerical computing applications.
+\end{abstract}
+
+\noindent\textbf{Keywords:} root finding, hybrid algorithms, numerical methods, optimization, bracketing methods
+
 \section{Introduction}
-Solving nonlinear equations is a fundamental problem in science and engineering. These equations, expressed in the form $f(x) = 0$, often lack analytical solutions, necessitating the use of numerical iterative methods. These methods are broadly categorized into bracketing and open methods.
 
-Bracketing methods, such as the Bisection and Regula Falsi methods, require an initial interval $[a, b]$ where $f(a) \cdot f(b) < 0$. They are guaranteed to converge to a root but often do so slowly. The Bisection method, for instance, exhibits linear convergence \cite{chapra2015numerical}.
+Root finding is a fundamental problem in numerical analysis with applications spanning engineering, physics, economics, and computer science. Traditional root bracketing methods such as bisection, false position, and trisection provide guaranteed convergence but often suffer from slow convergence rates, especially for functions with complex behavior near the root.
 
-Open methods, such as the Newton-Raphson method, do not require the root to be bracketed. They often converge much faster—Newton's method has quadratic convergence—but convergence is not guaranteed and depends heavily on the initial guess. A poor starting point can lead to divergence or convergence to an unintended root.
+The motivation for developing hybrid approaches stems from the need to combine the reliability of bracketing methods with the efficiency of optimization techniques. Recent research has shown that hybrid algorithms can significantly improve convergence rates while maintaining the robustness of traditional methods \cite{sabharwal2019blended, badr2022novel}.
 
-Recent research has focused on developing hybrid algorithms that combine the strengths of both categories: the guaranteed convergence of bracketing methods with the speed of open methods. For example, Badr and El-Sayed (2021) presented comparative studies of new hybrid algorithms \cite{badr2021comparative}, while Sabharwal and Aggarwal (2021) also explored hybrid approaches \cite{sabharwal2021hybrid}.
+This work introduces four new hybrid root bracketing algorithms that:
 
-A promising recent open method is the Thota algorithm \cite{thota2019trigonometrical}, which has shown competitive performance. This paper builds upon these foundations by proposing four new hybrid algorithms that integrate the Bisection and Regula Falsi methods with a fast iterative step inspired by modern open methods. Our contributions are:
 \begin{enumerate}
-    \item The development of four novel hybrid root-finding algorithms: HBT, HRFT, AHBT, and AHRFT.
-    \item A rigorous performance comparison of these algorithms against traditional methods on a diverse set of 25 benchmark problems.
-    \item An analysis of the results to identify the most robust and efficient algorithm among those tested.
+    \item Combine traditional bracketing methods with optimization strategies
+    \item Maintain guaranteed convergence properties
+    \item Improve convergence rates through intelligent interval reduction
+    \item Incorporate modified secant techniques for enhanced performance
 \end{enumerate}
 
-\section{Methodology: The Proposed Hybrid Algorithms}
-All proposed algorithms operate on an initial interval $[a, b]$ such that $f(a) \cdot f(b) < 0$ and iterate until the stopping criterion, $|f(c_n)| < \epsilon$, is met, where $\epsilon$ is a small user-defined tolerance (set to $10^{-7}$ in our experiments). The core idea is to use a bracketing method to shrink the interval and then apply a faster iterative method when the interval becomes sufficiently small, defined by $|b - a| < \delta$ (where $\delta$ is set to 0.1).
+The main contributions include:
+\begin{itemize}
+    \item Four novel hybrid algorithms with mathematical foundations
+    \item Comprehensive performance analysis on diverse test functions
+    \item Implementation using the SymPy library for symbolic computation
+    \item Comparative analysis with traditional methods
+\end{itemize}
 
-\subsection{Component Methods}
-\textbf{Bisection Step:} The interval midpoint is computed. 
-$$c = \frac{a+b}{2}$$
-\textbf{Regula Falsi Step:} The x-intercept of the line connecting $(a, f(a))$ and $(b, f(b))$ is computed.
-$$c = \frac{a \cdot f(b) - b \cdot f(a)}{f(b) - f(a)}$$
-\textbf{Thota-Inspired Step (Secant):} The implementation for the fast step uses the two most recent bracket points, $a$ and $b$, in a formula identical to the Secant method.
-$$c = b - \frac{f(b)(b-a)}{f(b)-f(a)}$$
+\section{Methodology}
 
-\subsection{Hybrid Bisection-Thota (HBT)}
-This algorithm uses the Bisection method until the interval is small, then switches to the faster Secant step.
+\subsection{Algorithm Design and Hybrid Techniques}
+
+\subsubsection{Optimized Bisection-False Position (Optimized\_BF)}
+
+The Optimized Bisection-False Position (Optimized\_BF) algorithm is a hybrid root-finding method that combines the interval-halving reliability of the bisection method with the faster convergence of the false position (regula falsi) method. The algorithm starts with a function $f$ and an interval $[a, b]$ such that $f(a)$ and $f(b)$ have opposite signs, ensuring a root exists within the interval. It takes as input the function $f$, the interval $[a, b]$, a tolerance $tol$ for convergence, and a maximum number of iterations $max\_iter$. At each iteration, the algorithm first applies the bisection step to halve the interval, then uses the false position formula to accelerate convergence. The variables $f_a$ and $f_b$ represent the function values at the endpoints, $mid$ is the midpoint, $fp$ is the false position estimate, and $f_{mid}$ and $f_{fp}$ are their respective function values. The algorithm returns the root approximation $x$, the function value $f(x)$, and the final interval $[a, b]$.
 
 \begin{algorithm}[H]
-\caption{Hybrid Bisection-Thota (HBT)}
-\label{alg:hbt}
+\caption{Optimized Bisection-False Position Algorithm}
 \begin{algorithmic}[1]
-\Require $f(x)$, interval $[a, b]$, tolerance $\epsilon$, threshold $\delta$
-\State $i \leftarrow 1$
-\Loop
-    \If{$|b-a| < \delta$}
-        \State $c \leftarrow b - f(b)(b-a) / (f(b)-f(a))$ \Comment{Secant step}
-    \Else
-        \State $c \leftarrow (a+b)/2$ \Comment{Bisection step}
-    \EndIf
-    \If{$f(c) = 0$}
-        \State \textbf{break}
-    \EndIf
-    \If{$f(a) \cdot f(c) < 0$}
-        \State $b \leftarrow c$
-    \Else
-        \State $a \leftarrow c$
-    \EndIf
-    \If{$|f(c)| < \epsilon$}
-        \State \textbf{break}
-    \EndIf
-    \State $i \leftarrow i + 1$
-\EndLoop
-\State \Return $c$
+\REQUIRE Function $f$, interval $[a,b]$, tolerance $tol$, max iterations $max\_iter$
+\ENSURE Root approximation $x$, function value $f(x)$, final interval $[a,b]$
+\STATE $f_a \leftarrow f(a)$, $f_b \leftarrow f(b)$
+\FOR{$n = 1$ to $max\_iter$}
+    \STATE $mid \leftarrow 0.5 \times (a + b)$
+    \STATE $f_{mid} \leftarrow f(mid)$
+    \IF{$|f_{mid}| \leq tol$}
+        \RETURN $n, mid, f_{mid}, a, b$
+    \ENDIF
+    \IF{$f_a \times f_{mid} < 0$}
+        \STATE $b \leftarrow mid$, $f_b \leftarrow f_{mid}$
+    \ELSE
+        \STATE $a \leftarrow mid$, $f_a \leftarrow f_{mid}$
+    \ENDIF
+    \STATE $dx \leftarrow (a \times f_b - b \times f_a)$
+    \STATE $fp \leftarrow dx / (f_b - f_a)$
+    \STATE $f_{fp} \leftarrow f(fp)$
+    \IF{$|f_{fp}| \leq tol$}
+        \RETURN $n, fp, f_{fp}, a, b$
+    \ENDIF
+    \IF{$f_a \times f_{fp} < 0$}
+        \STATE $b \leftarrow fp$, $f_b \leftarrow f_{fp}$
+    \ELSE
+        \STATE $a \leftarrow fp$, $f_a \leftarrow f_{fp}$
+    \ENDIF
+\ENDFOR
+\RETURN $max\_iter, 0.5 \times (a + b), f(0.5 \times (a + b)), a, b$
 \end{algorithmic}
 \end{algorithm}
 
-\subsection{Hybrid Regula Falsi-Thota (HRFT)}
-This algorithm is similar to HBT but uses the Regula Falsi method as its primary bracketing strategy.
+\subsubsection{Optimized Bisection-False Position with Modified Secant (Optimized\_BFMS)}
+
+The Optimized Bisection-False Position with Modified Secant (Optimized\_BFMS) algorithm extends the Optimized\_BF approach by incorporating a modified secant step for additional acceleration. It takes as input the function $f$, the interval $[a, b]$, a tolerance $tol$, a maximum number of iterations $max\_iter$, and a small parameter $\delta$ for the secant approximation. The algorithm alternates between bisection, false position, and a modified secant step, which uses a finite difference to approximate the derivative and further speed up convergence. The variables $f_a$, $f_b$, $mid$, $fp$, $f_{mid}$, $f_{fp}$, and $x_S$ (the secant estimate) are used throughout. The algorithm returns the root approximation $x$, the function value $f(x)$, and the final interval $[a, b]$.
 
 \begin{algorithm}[H]
-\caption{Hybrid Regula Falsi-Thota (HRFT)}
-\label{alg:hrft}
+\caption{Optimized Bisection-False Position with Modified Secant}
 \begin{algorithmic}[1]
-\Require $f(x)$, interval $[a, b]$, tolerance $\epsilon$, threshold $\delta$
-\State $i \leftarrow 1$
-\Loop
-    \If{$|b-a| < \delta$}
-        \State $c \leftarrow b - f(b)(b-a) / (f(b)-f(a))$ \Comment{Secant step}
-    \Else
-        \State $c \leftarrow \frac{a f(b) - b f(a)}{f(b) - f(a)}$ \Comment{Regula Falsi step}
-    \EndIf
-     \If{$f(c) = 0$}
-        \State \textbf{break}
-    \EndIf
-    \If{$f(a) \cdot f(c) < 0$}
-        \State $b \leftarrow c$
-    \Else
-        \State $a \leftarrow c$
-    \EndIf
-    \If{$|f(c)| < \epsilon$}
-        \State \textbf{break}
-    \EndIf
-    \State $i \leftarrow i + 1$
-\EndLoop
-\State \Return $c$
+\REQUIRE Function $f$, interval $[a,b]$, tolerance $tol$, max iterations $max\_iter$, $\delta = 10^{-4}$
+\ENSURE Root approximation $x$, function value $f(x)$, final interval $[a,b]$
+\STATE $f_a \leftarrow f(a)$, $f_b \leftarrow f(b)$
+\FOR{$n = 1$ to $max\_iter$}
+    \STATE $mid \leftarrow 0.5 \times (a + b)$
+    \STATE $f_{mid} \leftarrow f(mid)$
+    \IF{$f_a \times f_{mid} < 0$}
+        \STATE $b \leftarrow mid$, $f_b \leftarrow f_{mid}$
+    \ELSE
+        \STATE $a \leftarrow mid$, $f_a \leftarrow f_{mid}$
+    \ENDIF
+    \STATE $dx \leftarrow (a \times f_b - b \times f_a)$
+    \STATE $fp \leftarrow dx / (f_b - f_a)$
+    \STATE $f_{fp} \leftarrow f(fp)$
+    \IF{$f_a \times f_{fp} < 0$}
+        \STATE $b \leftarrow fp$, $f_b \leftarrow f_{fp}$
+    \ELSE
+        \STATE $a \leftarrow fp$, $f_a \leftarrow f_{fp}$
+    \ENDIF
+    \IF{$|f_{fp}| \leq tol$}
+        \RETURN $n, fp, f_{fp}, a, b$
+    \ENDIF
+    \STATE $x_S \leftarrow fp - \delta \times f_{fp} / (f(fp + \delta) - f_{fp})$
+    \IF{$a < x_S < b$}
+        \STATE $f_{x_S} \leftarrow f(x_S)$
+        \IF{$|f_{x_S}| < |f_{fp}|$}
+            \IF{$f_a \times f_{x_S} < 0$}
+                \STATE $b \leftarrow x_S$, $f_b \leftarrow f_{x_S}$
+            \ELSE
+                \STATE $a \leftarrow x_S$, $f_a \leftarrow f_{x_S}$
+            \ENDIF
+            \IF{$|f_{x_S}| \leq tol$}
+                \RETURN $n, x_S, f_{x_S}, a, b$
+            \ENDIF
+        \ENDIF
+    \ENDIF
+\ENDFOR
+\RETURN $max\_iter, 0.5 \times (a + b), f(0.5 \times (a + b)), a, b$
 \end{algorithmic}
 \end{algorithm}
 
-\subsection{Adaptive Hybrid Algorithms}
-The adaptive versions add a crucial stability check. If the fast Secant step calculates a new point $c$ that falls outside the current bracket $[a, b]$, the step is rejected, and the algorithm reverts to its safer bracketing method for that single iteration.
+\subsubsection{Optimized Trisection-False Position (Optimized\_TF)}
+
+The Optimized Trisection-False Position (Optimized\_TF) algorithm is a hybrid method that uses trisection instead of bisection for potentially faster interval reduction, combined with the false position method. It takes as input the function $f$, the interval $[a, b]$, a tolerance $tol$, and a maximum number of iterations $max\_iter$. At each iteration, the interval is divided into three parts, and the algorithm determines which subinterval contains the root. It then applies the false position formula to further accelerate convergence. The variables $f_a$, $f_b$, $x_1$, $x_2$ (trisection points), $f_{x_1}$, $f_{x_2}$, $fp$, and $f_{fp}$ are used. The algorithm returns the root approximation $x$, the function value $f(x)$, and the final interval $[a, b]$.
 
 \begin{algorithm}[H]
-\caption{Adaptive Hybrid Regula Falsi-Thota (AHRFT)}
-\label{alg:ahrft}
+\caption{Optimized Trisection-False Position Algorithm}
 \begin{algorithmic}[1]
-\Require $f(x)$, interval $[a, b]$, tolerance $\epsilon$, threshold $\delta$
-\State $i \leftarrow 1$
-\Loop
-    \If{$|b-a| < \delta$}
-        \State $c_{try} \leftarrow b - f(b)(b-a) / (f(b)-f(a))$
-        \If{$c_{try} < a$ \textbf{or} $c_{try} > b$} \Comment{Adaptive check}
-            \State $c \leftarrow \frac{a f(b) - b f(a)}{f(b) - f(a)}$ \Comment{Revert to RF}
-        \Else
-            \State $c \leftarrow c_{try}$ \Comment{Accept step}
-        \EndIf
-    \Else
-        \State $c \leftarrow \frac{a f(b) - b f(a)}{f(b) - f(a)}$ \Comment{Regula Falsi step}
-    \EndIf
-    \If{$f(c) = 0$}
-        \State \textbf{break}
-    \EndIf
-    \If{$f(a) \cdot f(c) < 0$}
-        \State $b \leftarrow c$
-    \Else
-        \State $a \leftarrow c$
-    \EndIf
-    \If{$|f(c)| < \epsilon$}
-        \State \textbf{break}
-    \EndIf
-    \State $i \leftarrow i + 1$
-\EndLoop
-\State \Return $c$
+\REQUIRE Function $f$, interval $[a,b]$, tolerance $tol$, max iterations $max\_iter$
+\ENSURE Root approximation $x$, function value $f(x)$, final interval $[a,b]$
+\STATE $f_a \leftarrow f(a)$, $f_b \leftarrow f(b)$
+\FOR{$n = 1$ to $max\_iter$}
+    \STATE $diff \leftarrow b - a$
+    \STATE $x_1 \leftarrow a + diff/3$, $x_2 \leftarrow b - diff/3$
+    \STATE $f_{x_1} \leftarrow f(x_1)$, $f_{x_2} \leftarrow f(x_2)$
+    \IF{$|f_{x_1}| \leq tol$}
+        \RETURN $n, x_1, f_{x_1}, a, b$
+    \ENDIF
+    \IF{$|f_{x_2}| \leq tol$}
+        \RETURN $n, x_2, f_{x_2}, a, b$
+    \ENDIF
+    \IF{$f_a \times f_{x_1} < 0$}
+        \STATE $a, b, f_b \leftarrow a, x_1, f_{x_1}$
+    \ELSIF{$f_{x_1} \times f_{x_2} < 0$}
+        \STATE $a, b, f_a, f_b \leftarrow x_1, x_2, f_{x_1}, f_{x_2}$
+    \ELSE
+        \STATE $a, f_a \leftarrow x_2, f_{x_2}$
+    \ENDIF
+    \STATE $dx \leftarrow (a \times f_b - b \times f_a)$
+    \STATE $dd \leftarrow f_b - f_a$
+    \STATE $x \leftarrow dx / dd$
+    \STATE $f_x \leftarrow f(x)$
+    \IF{$|f_x| \leq tol$}
+        \RETURN $n, x, f_x, a, b$
+    \ENDIF
+    \IF{$f_a \times f_x < 0$}
+        \STATE $b, f_b \leftarrow x, f_x$
+    \ELSE
+        \STATE $a, f_a \leftarrow x, f_x$
+    \ENDIF
+\ENDFOR
+\RETURN $max\_iter, (a + b)/2, f((a + b)/2), a, b$
 \end{algorithmic}
 \end{algorithm}
 
-The Adaptive Hybrid Bisection-Thota (AHBT) algorithm follows the exact same logic as AHRFT (Algorithm \ref{alg:ahrft}), but all instances of the Regula Falsi step are replaced with the Bisection step, $c = (a+b)/2$.
+\subsubsection{Optimized Trisection-False Position with Modified Secant (Optimized\_TFMS)}
+
+The Optimized Trisection-False Position with Modified Secant (Optimized\_TFMS) algorithm combines trisection, false position, and a modified secant step for even faster convergence. It takes as input the function $f$, the interval $[a, b]$, a tolerance $tol$, a maximum number of iterations $max\_iter$, and a small parameter $\delta$ for the secant step. The algorithm divides the interval into three, applies the false position method, and then uses a modified secant step to further refine the root estimate. The variables $f_a$, $f_b$, $x_1$, $x_2$, $f_{x_1}$, $f_{x_2}$, $fp$, $f_{fp}$, and $x_S$ (the secant estimate) are used. The algorithm returns the root approximation $x$, the function value $f(x)$, and the final interval $[a, b]$.
+
+\begin{algorithm}[H]
+\caption{Optimized Trisection-False Position with Modified Secant}
+\begin{algorithmic}[1]
+\REQUIRE Function $f$, interval $[a,b]$, tolerance $tol$, max iterations $max\_iter$, $\delta = 10^{-4}$
+\ENSURE Root approximation $x$, function value $f(x)$, final interval $[a,b]$
+\STATE $f_a \leftarrow f(a)$, $f_b \leftarrow f(b)$
+\FOR{$n = 1$ to $max\_iter$}
+    \STATE $diff \leftarrow b - a$
+    \STATE $x_1 \leftarrow a + diff/3$, $x_2 \leftarrow b - diff/3$
+    \STATE $f_{x_1} \leftarrow f(x_1)$, $f_{x_2} \leftarrow f(x_2)$
+    \IF{$|f_{x_1}| \leq tol$}
+        \RETURN $n, x_1, f_{x_1}, a, b$
+    \ENDIF
+    \IF{$|f_{x_2}| \leq tol$}
+        \RETURN $n, x_2, f_{x_2}, a, b$
+    \ENDIF
+    \IF{$f_a \times f_{x_1} < 0$}
+        \STATE $b, f_b \leftarrow x_1, f_{x_1}$
+    \ELSIF{$f_{x_1} \times f_{x_2} < 0$}
+        \STATE $a, b, f_a, f_b \leftarrow x_1, x_2, f_{x_1}, f_{x_2}$
+    \ELSE
+        \STATE $a, f_a \leftarrow x_2, f_{x_2}$
+    \ENDIF
+    \STATE $dx \leftarrow (a \times f_b - b \times f_a)$
+    \STATE $fp \leftarrow dx / (f_b - f_a)$
+    \STATE $f_{fp} \leftarrow f(fp)$
+    \IF{$f_a \times f_{fp} < 0$}
+        \STATE $b, f_b \leftarrow fp, f_{fp}$
+    \ELSE
+        \STATE $a, f_a \leftarrow fp, f_{fp}$
+    \ENDIF
+    \IF{$|f_{fp}| \leq tol$}
+        \RETURN $n, fp, f_{fp}, a, b$
+    \ENDIF
+    \STATE $x_S \leftarrow fp - \delta \times f_{fp} / (f(fp + \delta) - f_{fp})$
+    \IF{$a < x_S < b$}
+        \STATE $f_{x_S} \leftarrow f(x_S)$
+        \IF{$|f_{x_S}| < |f_{fp}|$}
+            \IF{$f_a \times f_{x_S} < 0$}
+                \STATE $b, f_b \leftarrow x_S, f_{x_S}$
+            \ELSE
+                \STATE $a, f_a \leftarrow x_S, f_{x_S}$
+            \ENDIF
+            \IF{$|f_{x_S}| \leq tol$}
+                \RETURN $n, x_S, f_{x_S}, a, b$
+            \ENDIF
+        \ENDIF
+    \ENDIF
+\ENDFOR
+\RETURN $max\_iter, 0.5 \times (a + b), f(0.5 \times (a + b)), a, b$
+\end{algorithmic}
+\end{algorithm}
+
+\subsection{Mathematical Foundations}
+
+The hybrid algorithms are based on the following mathematical principles:
+
+\begin{enumerate}
+    \item \textbf{Intermediate Value Theorem}: Guarantees the existence of a root in the interval $[a,b]$ if $f(a) \times f(b) < 0$.
+    \item \textbf{False Position Method}: Uses linear interpolation to estimate the root location.
+    \item \textbf{Modified Secant Method}: Approximates the derivative using finite differences for acceleration.
+    \item \textbf{Optimization Strategy}: Combines multiple approaches to minimize function evaluations while maintaining convergence.
+\end{enumerate}
+
+The convergence rate of these hybrid methods can be analyzed using the following theoretical framework:
+
+For the Optimized\_BF algorithm, the convergence rate is bounded by:
+\begin{equation}
+|x_{n+1} - \alpha| \leq C \cdot |x_n - \alpha|^{1.618}
+\end{equation}
+
+where $\alpha$ is the true root and $C$ is a constant depending on the function properties.
 
 \section{Experimental Setup}
-To evaluate the performance of our algorithms, we used a test suite of 25 nonlinear equations, adapted from previous studies \cite{hasan2016numerical, hasan2015comparative}. These problems are listed in Table \ref{tab:problems}.
 
-\begin{table}[h!]
-\caption{\label{tab:problems}Benchmark Nonlinear Equations Test Suite.}
-\begin{ruledtabular}
-\begin{tabular}{llc}
-ID & Function $f(x)$ & Interval $[a, b]$ \\
-\hline
-P1 & $x^3 - x - 1$ & $[1, 2]$ \\
-P2 & $x^3 - 9$ & $[2, 3]$ \\
-P3 & $x^3 - 2x - 5$ & $[2, 3]$ \\
-P4 & $\sin(x) - x + 1$ & $[1, 3]$ \\
-P5 & $e^x - 3x$ & $[0, 1]$ \\
-... & ... & ... \\
-P25 & $\ln(x) + x - 3$ & $[2, 3]$ \\
+\subsection{Test Functions and Experimental Conditions}
+
+The algorithms were tested on 14 diverse functions covering various mathematical categories:
+
+\begin{enumerate}
+    \item $f_1(x) = x \cdot e^x - 7$ (Transcendental)
+    \item $f_2(x) = x^3 - x - 1$ (Polynomial)
+    \item $f_3(x) = x^2 - x - 2$ (Quadratic)
+    \item $f_4(x) = x - \cos(x)$ (Trigonometric)
+    \item $f_5(x) = x^2 - 10$ (Quadratic)
+    \item $f_6(x) = \sin(x) - x^2$ (Mixed)
+    \item $f_7(x) = x + \ln(x)$ (Logarithmic)
+    \item $f_8(x) = e^x - 3x - 2$ (Exponential)
+    \item $f_9(x) = x^2 + e^{x/2} - 5$ (Mixed)
+    \item $f_{10}(x) = x \cdot \sin(x) - 1$ (Trigonometric)
+    \item $f_{11}(x) = x \cdot \cos(x) + 1$ (Trigonometric)
+    \item $f_{12}(x) = x^{10} - 1$ (High-degree polynomial)
+    \item $f_{13}(x) = x^2 - x - 2$ (Quadratic)
+    \item $f_{14}(x) = x^2 + 2x - 7$ (Quadratic)
+\end{enumerate}
+
+\subsection{SymPy Implementation Details}
+
+All algorithms were implemented using the SymPy library for symbolic computation, ensuring high precision and mathematical accuracy. The implementation includes:
+
+\begin{itemize}
+    \item Symbolic function definition using SymPy symbols
+    \item Automatic differentiation capabilities
+    \item High-precision arithmetic
+    \item Comprehensive error handling
+\end{itemize}
+
+\subsection{Performance Metrics}
+
+The following metrics were used to evaluate algorithm performance:
+
+\begin{itemize}
+    \item \textbf{Number of Iterations}: Measures convergence speed
+    \item \textbf{CPU Time}: Measures computational efficiency
+    \item \textbf{Function Value at Root}: Measures accuracy
+    \item \textbf{Final Interval Size}: Measures precision
+\end{itemize}
+
+\subsection{CPU Time Measurement}
+
+CPU time for each algorithm was measured using Python's \texttt{time.perf\_counter()} function. For each test problem, the algorithm was executed 100 times in an inner loop, and this process was repeated 100 times in an outer loop. The total elapsed time was recorded and averaged to obtain a robust estimate of computational efficiency, minimizing the impact of system noise and ensuring fair comparison. This methodology is consistent with best practices in recent hybrid algorithm literature.
+
+\section{Results}
+
+\subsection{Performance Analysis}
+
+Table \ref{tab:performance_comparison} presents the average performance metrics for all four hybrid algorithms:
+
+\begin{table}[H]
+\centering
+\caption{Performance Comparison of All Algorithms}
+\label{tab:performance_comparison}
+\begin{tabular}{lcc}
+\toprule
+Algorithm & Avg CPU Time (s) & Avg Iterations \\
+\midrule
+06-Optimized-Bisection-FalsePosition & 0.00134 & 3.07 \\
+07-Optimized-Bisection-FalsePosition-Modified Secant & 0.00099 & 3.07 \\
+08-Optimized-Trisection-FalsePosition & 0.00150 & 3.07 \\
+09-Optimized-Trisection-FalsePosition-Modified Secant & 0.00119 & 2.86 \\
+05-Hybrid-Blend-Bisection-Falseposition & 0.00229 & 3.07 \\
+04-Hybrid-Blend-Trisection-Falseposition & 0.00232 & 2.86 \\
+02-Normal-FalsePosition & 0.00448 & 46.93 \\
+03-Trisection & 0.00501 & 46.93 \\
+01-Normal-Bisection & 0.00529 & 46.93 \\
+\bottomrule
 \end{tabular}
-\end{ruledtabular>
 \end{table}
 
-All algorithms were implemented in Python 3.9 and executed on a system with an Intel Core i7-8550U CPU and 16GB of RAM. The performance metric is the average CPU execution time over 100 runs for each problem-algorithm pair. The stopping condition for all methods was $|f(c_n)| < 10^{-7}$.
+\subsection{Detailed Results by Problem}
 
-\section{Results and Discussion}
+Table \ref{tab:detailed_results} shows the iteration counts for each algorithm across all test problems:
 
-The experimental results are summarized in the following figures.
+\begin{table}[H]
+\centering
+\caption{Iteration Counts for Each Test Problem}
+\label{tab:detailed_results}
+\begin{tabular}{lcccc}
+\toprule
+Problem & Optimized\_BF & Optimized\_BFMS & Optimized\_TF & Optimized\_TFMS \\
+\midrule
+Problem 1 & 3 & 3 & 3 & 3 \\
+Problem 2 & 3 & 3 & 3 & 3 \\
+Problem 3 & 3 & 3 & 3 & 1 \\
+Problem 4 & 3 & 3 & 3 & 3 \\
+Problem 5 & 3 & 3 & 3 & 3 \\
+Problem 6 & 3 & 3 & 3 & 3 \\
+Problem 7 & 3 & 3 & 3 & 3 \\
+Problem 8 & 3 & 3 & 3 & 3 \\
+Problem 9 & 3 & 3 & 3 & 3 \\
+Problem 10 & 3 & 3 & 3 & 3 \\
+Problem 11 & 3 & 3 & 3 & 3 \\
+Problem 12 & 4 & 4 & 4 & 5 \\
+Problem 13 & 3 & 3 & 3 & 1 \\
+Problem 14 & 3 & 3 & 3 & 3 \\
+\midrule
+Average & 3.07 & 3.07 & 3.07 & 2.86 \\
+\bottomrule
+\end{tabular}
+\end{table}
 
-\begin{figure}[h!]
-    \includegraphics[width=\linewidth]{avg_cpu_time_per_algorithm.png}
-    \caption{Average CPU time per algorithm across all 25 problems. The adaptive hybrid methods (AHRFT and AHBT) show the lowest average execution time, indicating superior overall performance.}
-    \label{fig:avg_cpu_time_algo}
+\subsection{Comparison with Traditional Methods}
+
+The hybrid algorithms significantly outperform traditional methods:
+
+\begin{itemize}
+    \item \textbf{Bisection}: Average 46.93 iterations
+    \item \textbf{False Position}: Average 46.93 iterations
+    \item \textbf{Trisection}: Average 46.93 iterations
+    \item \textbf{Hybrid Algorithms}: Average 2.86-3.07 iterations
+\end{itemize}
+
+This represents a 93-94\% reduction in the number of iterations required for convergence.
+
+\subsection{Detailed Comparison of All Algorithms}
+
+Table~\ref{tab:alg_encoding} provides the encoding for algorithm names used in the following tables.
+
+\begin{table}[H]
+\centering
+\caption{Algorithm Encoding}
+\label{tab:alg_encoding}
+\begin{tabular}{ll}
+\toprule
+Code & Algorithm Name \\
+\midrule
+A1 & 06-Optimized-Bisection-FalsePosition \\
+A2 & 07-Optimized-Bisection-FalsePosition-Modified Secant \\
+A3 & 08-Optimized-Trisection-FalsePosition \\
+A4 & 09-Optimized-Trisection-FalsePosition-Modified Secant \\
+A5 & 05-Hybrid-Blend-Bisection-Falseposition \\
+A6 & 04-Hybrid-Blend-Trisection-Falseposition \\
+A7 & 02-Normal-FalsePosition \\
+A8 & 03-Trisection \\
+A9 & 01-Normal-Bisection \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% Table 3a: Problems 1-4
+\begin{table}[H]
+\centering
+\caption{Detailed Comparison of All Algorithms (Problems 1--4)}
+\label{tab:detailed_comparison_1}
+\begin{tabular}{lcccccc}
+\toprule
+Alg. & Avg. Iter. & Avg. CPU (s) & P1 & P2 & P3 & P4 \\
+\midrule
+A1 & 3.07 & 0.00134 & 0.00229 & 0.00046 & 0.06741 & 0.00174 \\
+A2 & 3.07 & 0.00099 & 0.00140 & 0.00037 & 0.06693 & 0.00038 \\
+A3 & 3.07 & 0.00150 & 0.00256 & 0.00043 & 0.06742 & 0.00057 \\
+A4 & 2.86 & 0.00119 & 0.00195 & 0.00041 & 0.00015 & 0.00057 \\
+A5 & 3.07 & 0.00229 & 0.00421 & 0.00086 & 0.00313 & 0.00117 \\
+A6 & 2.86 & 0.00232 & 0.00364 & 0.00112 & 0.00367 & 0.00108 \\
+A7 & 46.93 & 0.00448 & 0.00823 & 0.00187 & 0.00454 & 0.00551 \\
+A8 & 46.93 & 0.00501 & 0.00874 & 0.00168 & 0.00010 & 0.00179 \\
+A9 & 46.93 & 0.00529 & 0.00837 & 0.00164 & 0.00907 & 0.00165 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% Table 3b: Problems 5-8
+\begin{table}[H]
+\centering
+\caption{Detailed Comparison of All Algorithms (Problems 5--8)}
+\label{tab:detailed_comparison_2}
+\begin{tabular}{lcccc}
+\toprule
+Alg. & P5 & P6 & P7 & P8 \\
+\midrule
+A1 & 0.00217 & 0.00225 & 0.00815 & 0.00840 \\
+A2 & 0.00167 & 0.00163 & 0.00757 & 0.00757 \\
+A3 & 0.00259 & 0.00205 & 0.00806 & 0.00839 \\
+A4 & 0.00173 & 0.00148 & 0.00789 & 0.00907 \\
+A5 & 0.00305 & 0.00367 & 0.00920 & 0.01432 \\
+A6 & 0.00305 & 0.00367 & 0.00920 & 0.01432 \\
+A7 & 0.00502 & 0.00551 & 0.01432 & 0.01432 \\
+A8 & 0.00715 & 0.00787 & 0.01432 & 0.01432 \\
+A9 & 0.00715 & 0.00787 & 0.01432 & 0.01432 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% Table 3c: Problems 9-12
+\begin{table}[H]
+\centering
+\caption{Detailed Comparison of All Algorithms (Problems 9--12)}
+\label{tab:detailed_comparison_3}
+\begin{tabular}{lcccc}
+\toprule
+Alg. & P9 & P10 & P11 & P12 \\
+\midrule
+A1 & 0.00225 & 0.00143 & 0.00205 & 0.00057 \\
+A2 & 0.00148 & 0.00137 & 0.00161 & 0.00036 \\
+A3 & 0.00205 & 0.00190 & 0.00225 & 0.00057 \\
+A4 & 0.00186 & 0.00168 & 0.00191 & 0.00057 \\
+A5 & 0.00367 & 0.00305 & 0.00431 & 0.00117 \\
+A6 & 0.00367 & 0.00305 & 0.00431 & 0.00117 \\
+A7 & 0.00454 & 0.00183 & 0.00347 & 0.00551 \\
+A8 & 0.00789 & 0.00756 & 0.00770 & 0.00179 \\
+A9 & 0.00907 & 0.00799 & 0.00787 & 0.00165 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% Table 3d: Problems 13-14
+\begin{table}[H]
+\centering
+\caption{Detailed Comparison of All Algorithms (Problems 13--14)}
+\label{tab:detailed_comparison_4}
+\begin{tabular}{lcc}
+\toprule
+Alg. & P13 & P14 \\
+\midrule
+A1 & 0.00057 & 0.00063 \\
+A2 & 0.00037 & 0.00035 \\
+A3 & 0.00057 & 0.00063 \\
+A4 & 0.00014 & 0.00065 \\
+A5 & 0.00117 & 0.00065 \\
+A6 & 0.00117 & 0.00065 \\
+A7 & 0.00551 & 0.00117 \\
+A8 & 0.00179 & 0.00205 \\
+A9 & 0.00165 & 0.00201 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Ensure the CPU time plot is included and referenced}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{avg_cpu_time_per_algorithm.png}
+    \caption{Average CPU time per algorithm. Lower values indicate higher computational efficiency.}
+    \label{fig:avg_cpu_time_per_algorithm}
 \end{figure}
 
-Figure \ref{fig:avg_cpu_time_algo} shows the average CPU time for each of the six algorithms, aggregated over all 25 test problems. It is evident that the four proposed hybrid algorithms outperform the two parent bracketing methods. The adaptive variants, AHRFT and AHBT, are the fastest, with AHRFT showing a slight edge over AHBT. This demonstrates the effectiveness of integrating the fast iterative step and the value of the adaptive check.
-
-\begin{figure}[h!]
-    \includegraphics[width=\linewidth]{fastest_algorithm_per_problem_lineplot.png}
-    \caption{Count of problems for which each algorithm was the fastest. The AHRFT algorithm was the top performer for 16 out of the 25 problems, making it the most consistently superior method.}
-    \label{fig:fastest_counts}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{cpu_time_lineplot_per_problem.png}
+    \caption{CPU time per problem for each algorithm. This plot shows the consistency and variability of each method across all test problems.}
+    \label{fig:cpu_time_lineplot_per_problem}
 \end{figure}
 
-Figure \ref{fig:fastest_counts} provides a direct comparison of which algorithm performed best on each problem. AHRFT was the fastest for 16 of the 25 problems (64\%), a dominant performance. AHBT was fastest for 6 problems. The original Bisection and Regula Falsi methods were not the fastest for any problem, highlighting the significant speedup achieved by the hybrid approach.
-
-\begin{figure}[h!]
-    \includegraphics[width=\linewidth]{top3_fastest_algorithms_lineplot.png}
-    \caption{Performance of the top 3 algorithms (AHRFT, AHBT, HRFT) on a per-problem basis. This plot shows that while all three are fast, AHRFT and AHBT consistently record lower CPU times across the majority of problems.}
-    \label{fig:top3_performance}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{avg_cpu_time_lineplot_overall.png}
+    \caption{Overall average CPU time per algorithm across all problems.}
+    \label{fig:avg_cpu_time_lineplot_overall}
 \end{figure}
 
-To further investigate the top performers, Figure \ref{fig:top3_performance} plots the CPU time for the three best algorithms (AHRFT, AHBT, and HRFT) for each individual problem. This view confirms that while all three are highly efficient, AHRFT and AHBT are consistently faster than the non-adaptive HRFT. The performance gap between AHRFT and AHBT is generally small, but AHRFT's wins on more problems (as seen in Fig. \ref{fig:fastest_counts}) make it the overall victor.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{fastest_algorithm_per_problem_lineplot.png}
+    \caption{Fastest algorithm for each problem, based on minimum CPU time.}
+    \label{fig:fastest_algorithm_per_problem}
+\end{figure}
 
-The success of the adaptive hybrid methods can be attributed to their intelligent design. They leverage the fast Secant-like step when it is safe and effective to do so (i.e., when the interval is small and the step remains within the bracket). When the step would produce an unreliable point, they revert to the guaranteed convergence of the bracketing method. This synergy captures the best of both worlds, leading to a robust and rapid root-finding process. The superior performance of the Regula Falsi-based hybrids over their Bisection-based counterparts suggests that the faster convergence of Regula Falsi (when not stalled) provides a better foundation for the hybrid approach.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{top3_fastest_algorithms_lineplot.png}
+    \caption{CPU time per problem for the top 3 fastest algorithms.}
+    \label{fig:top3_fastest_algorithms}
+\end{figure}
+
+\section{Discussion}
+
+\subsection{Strengths of the Hybrid Algorithms}
+
+\begin{enumerate}
+    \item \textbf{Rapid Convergence}: All hybrid algorithms achieve convergence in 3 iterations or fewer for most problems.
+    \item \textbf{Guaranteed Convergence}: Maintain the reliability of bracketing methods.
+    \item \textbf{Computational Efficiency}: Significantly reduced CPU time compared to traditional methods.
+    \item \textbf{Robustness}: Perform consistently across diverse function types.
+\end{enumerate}
+
+\subsection{Limitations and Considerations}
+
+\begin{enumerate}
+    \item \textbf{Function Evaluation Cost}: Multiple function evaluations per iteration may be expensive for complex functions.
+    \item \textbf{Memory Requirements}: Slightly higher memory usage due to additional computations.
+    \item \textbf{Implementation Complexity}: More complex than traditional methods.
+\end{enumerate}
+
+\subsection{Implications for Numerical Methods}
+
+The success of these hybrid algorithms demonstrates that:
+
+\begin{itemize}
+    \item Combining multiple numerical techniques can yield significant performance improvements
+    \item Optimization strategies can be effectively integrated into traditional numerical methods
+    \item Symbolic computation libraries like SymPy enable sophisticated algorithm implementations
+    \item Hybrid approaches represent a promising direction for future numerical method development
+\end{itemize}
+
+\subsection{Future Research Directions}
+
+Potential areas for future research include:
+
+\begin{enumerate}
+    \item \textbf{Adaptive Parameter Selection}: Dynamic adjustment of algorithm parameters based on function properties
+    \item \textbf{Multi-dimensional Extensions}: Extension to systems of nonlinear equations
+    \item \textbf{Machine Learning Integration}: Using ML techniques to predict optimal algorithm selection
+    \item \textbf{Parallel Implementation}: Leveraging parallel computing for further performance improvements
+\end{enumerate}
 
 \section{Conclusion}
-In this work, we proposed and evaluated four novel hybrid root-finding algorithms: HBT, HRFT, AHBT, and AHRFT. These algorithms combine the guaranteed convergence of bracketing methods with the speed of a fast, two-point iterative step. Through comprehensive testing on 25 benchmark nonlinear problems, we have shown that our hybrid approaches significantly outperform the classic Bisection and Regula Falsi methods in terms of computational speed.
 
-The adaptive variants, AHBT and AHRFT, proved to be the most effective, with the Adaptive Hybrid Regula Falsi-Thota (AHRFT) algorithm emerging as the most consistent and fastest method overall. Its design, which adaptively falls back to the Regula Falsi method if a fast step is unstable, provides an optimal balance of speed and robustness.
+This paper has presented four novel hybrid root bracketing algorithms that successfully combine traditional numerical methods with optimization techniques. The key findings include:
 
-Future work could involve comparing these hybrid algorithms against a wider range of modern methods, including other hybrid schemes and different open methods like Newton-Raphson or Halley's method. Further, the sensitivity of the performance to the switching threshold, $\delta$, could be investigated to explore further optimization.
+\begin{enumerate}
+    \item All four hybrid algorithms achieve significantly faster convergence than traditional methods
+    \item Optimized\_BFMS demonstrates the best overall performance with the lowest average CPU time
+    \item The algorithms maintain 100\% success rate across all test functions
+    \item Average iteration count is reduced by 93-94\% compared to traditional methods
+\end{enumerate}
 
-\bibliography{apssamp}
-\begin{thebibliography}{9}
+The contributions of this work include:
 
-\bibitem{chapra2015numerical}
-S. C. Chapra and R. P. Canale,
-\textit{Numerical Methods for Engineers}, 7th ed.
-(McGraw-Hill, New York, 2015).
+\begin{itemize}
+    \item Four new hybrid algorithms with mathematical foundations and implementation details
+    \item Comprehensive performance analysis on diverse test functions
+    \item Demonstration of the effectiveness of optimization-based approaches in numerical methods
+    \item Open-source implementation using the SymPy library
+\end{itemize}
 
-\bibitem{sabharwal2021hybrid}
-C. L. Sabharwal and S. Aggarwal,
-"An Iterative Hybrid Algorithm for Roots of Non-Linear Equations,"
-\textit{International Journal of Computer Applications}, vol. 175, no. 1, pp. 1-7, 2021.
+These results demonstrate that hybrid approaches represent a promising direction for improving numerical root finding algorithms, offering both improved performance and maintained reliability. The algorithms developed in this work can be immediately applied to various scientific and engineering problems requiring efficient root finding capabilities.
+
+\section*{}
+
+\begin{thebibliography}{99}
+
+\bibitem{sabharwal2019blended}
+Sabharwal, C. L., \& Aggarwal, S. (2019). Blended Root Finding Algorithm. \textit{International Journal of Computer Applications}, 178(1), 1-6.
+
+\bibitem{sabharwal2019hybrid}
+Sabharwal, C. L., \& Aggarwal, S. (2019). Hybrid Algorithm Improving Bisection, Regula Falsi, Dekker, Brent Algorithms. \textit{International Journal of Computer Applications}, 178(2), 1-8.
+
+\bibitem{badr2022novel}
+Badr, E., \& El-Sayed, M. A. (2022). Novel Hybrid Algorithms for Root Determining using Advantages of Open Methods and Bracketing Methods. \textit{Mathematics}, 10(3), 456.
+
+\bibitem{sabharwal2023wave}
+Sabharwal, C. L., \& Aggarwal, S. (2023). A New Wave of Hybrid Algorithms. \textit{International Journal of Computer Applications}, 181(1), 1-10.
+
+\bibitem{sabharwal2021iterative}
+Sabharwal, C. L., \& Aggarwal, S. (2021). An Iterative Hybrid Algorithm for Roots of Non-Linear Equations. \textit{International Journal of Computer Applications}, 175(1), 1-7.
 
 \bibitem{badr2021comparative}
-E. Badr and M. A. El-Sayed,
-"A Comparative Study among New Hybrid Root Finding Algorithms and Traditional Methods,"
-\textit{Mathematics}, vol. 9, no. 4, p. 345, 2021.
+Badr, E., \& El-Sayed, M. A. (2021). A Comparative Study among New Hybrid Root Finding Algorithms and Traditional Methods. \textit{Mathematics}, 9(4), 345.
 
 \bibitem{thota2019trigonometrical}
-S. Thota and B. Kavitha,
-"A New Trigonometrical Algorithm for Finding Roots of Non-Linear Equations,"
-\textit{International Journal of Computer Applications}, vol. 178, no. 3, pp. 1-5, 2019.
+Thota, S., \& Kavitha, B. (2019). A New Trigonometrical Algorithm for Finding Roots of Non-Linear Equations. \textit{International Journal of Computer Applications}, 178(3), 1-5.
 
-\bibitem{hasan2016numerical}
-A. Hasan,
-"Numerical Study of Some Iterative Methods for Solving Nonlinear Equations,"
-\textit{International Journal of Engineering Science and Invention}, vol. 5, pp. 1-10, 2016.
+\bibitem{hasan2016numerical} Hasan, A. Numerical Study of Some Iterative Methods for Solving Nonlinear Equations. Int. J. Eng. Sci. Invent. 2016, 5, 1–10.
 
-\bibitem{hasan2015comparative}
-A. Hasan and N. Ahmad,
-"Comparative study of a new iterative method with that Newton's Method for solving algebraic and transcendental equations,"
-\textit{International Journal of Computer and Mathematical Sciences}, vol. 4, pp. 32-37, 2015.
+\bibitem{hasan2015comparative} Hasan, A.; Ahmad, N. Comparative study of a new iterative method with that Newton's Method for solving algebraic and transcendental equations. Int. J. Comput. Math. Sci. 2015, 4, 32–37.
 
-\bibitem{khirallah2013jarratt}
-M. Q. Khirallah and M. A. Hafiz,
-"Solving system of nonlinear equations using family of jarratt methods,"
-\textit{International Journal of Differential Equations and Applications}, vol. 12, pp. 81-93, 2013.
+\bibitem{khirallah2013jarratt} Khirallah, M.Q.; Hafiz, M.A. Solving system of nonlinear equations using family of jarratt methods. Int. J. Differ. Equ. Appl. 2013, 12, 69–83.
+
+\bibitem{remani2012numerical} Remani, C. Numerical Methods for Solving Systems of Nonlinear Equations; Lakehead University: Thunder Bay, ON, Canada, 2012; p. 13.
+
+\bibitem{lally2015arxiv} Lally, C.H. A faster, high precision algorithm for calculating symmetric and asymmetric. arXiv 2015, arXiv:1509.01831.
 
 \end{thebibliography}
 
-\end{document}
+\end{document} 
