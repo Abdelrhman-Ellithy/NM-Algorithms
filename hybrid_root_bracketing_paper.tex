@@ -59,8 +59,6 @@ Recent advances in root-finding algorithms have focused on improving the converg
 
 The main contributions of this paper are as follows. First, we present four novel hybrid algorithms, each with a solid mathematical foundation, that blend the best aspects of existing root-finding techniques. Second, we provide a comprehensive performance analysis of these algorithms on a diverse set of test functions, demonstrating their effectiveness and generality. Third, we detail the implementation of these methods using the SymPy library for symbolic computation, which allows for high-precision and flexible experimentation. Finally, we offer a comparative analysis with traditional methods, highlighting the advantages and potential of the proposed hybrid approaches in practical numerical computation scenarios.
 
-The remainder of this paper is organized as follows. Section II presents the methodology and mathematical foundations of the proposed algorithms. Section III describes the experimental setup, including the mathematical equations dataset and performance metrics. Section IV reports and discusses the results, including detailed comparisons and visualizations. Section V concludes the paper and outlines directions for future research.
-
 \section{Methodology}
 
 The methodology adopted in this study is centered on the design and development of four hybrid root bracketing algorithms. Each algorithm is constructed by integrating the strengths of traditional bracketing methods with optimization-based enhancements. For example, the Optimized Bisection-False Position (Optimized\_BF) algorithm leverages the interval-halving reliability of bisection and the faster convergence of the false position method. The Optimized\_BFMS algorithm incorporates a modified secant step to further accelerate convergence. The trisection-based variants, Optimized\_TF and Optimized\_TFMS, use a three-way interval split and integrate both false position and secant-based acceleration. All algorithms are implemented using the SymPy library, which provides symbolic computation capabilities and high-precision arithmetic. The mathematical foundations of these methods are rooted in the Intermediate Value Theorem, linear interpolation, and finite-difference approximations for derivative estimation.
@@ -95,7 +93,6 @@ The algorithm is defined with the method signature Optimized\_BF$(f, a, b, tol, 
 
 The implementation uses SymPy for symbolic computation and high-precision arithmetic, with a tolerance of $10^{-14}$ for convergence testing. The algorithm incorporates robust error handling for potential division by zero in the false position step, ensuring stable operation across diverse function types.
 
-\vspace{0.3em}
 \begin{algorithm}[H]
 \caption{ Optimized Bisection-False Position}
 \begin{algorithmic}[1]
@@ -128,7 +125,6 @@ The implementation uses SymPy for symbolic computation and high-precision arithm
 \State \Return $max\_iter, 0.5 \times (a + b), f(0.5 \times (a + b)), a, b$
 \end{algorithmic}
 \end{algorithm}
-\vspace{0.2em}
 
 \subsubsection{Algorithm 2: Optimized Bisection-False Position with Modified Secant (Optimized\_BFMS)}
 
@@ -154,7 +150,6 @@ The algorithm is defined with the method signature Optimized\_BFMS$(f, a, b, tol
 
 The choice of $\delta = 10^{-4}$ is based on extensive numerical experimentation and represents an optimal balance between approximation accuracy and numerical stability. Smaller values of $\delta$ provide more accurate derivative approximations but may lead to numerical instability, while larger values ensure stability but may reduce the effectiveness of the secant acceleration.
 
-\vspace{0.3em}
 \begin{algorithm}[H]
 \caption{ Optimized Bisection-False Position with Modified Secant}
 \begin{algorithmic}[1]
@@ -198,7 +193,6 @@ The choice of $\delta = 10^{-4}$ is based on extensive numerical experimentation
 \State \Return $max\_iter, 0.5 \times (a + b), f(0.5 \times (a + b)), a, b$
 \end{algorithmic}
 \end{algorithm}
-\vspace{0.2em}
 
 \subsubsection{Algorithm 3: Optimized Trisection-False Position (Optimized\_TF)}
 
@@ -220,7 +214,6 @@ The algorithm is defined with the method signature Optimized\_TF$(f, a, b, tol, 
 
 The trisection approach provides a theoretical advantage over bisection by potentially reducing the interval size more rapidly, as analyzed by \cite{demir2008trisection}. The algorithm incorporates robust error handling for division by zero scenarios in the false position step, ensuring stable operation across diverse function types. The implementation maintains the bracketing property throughout the computation, guaranteeing convergence for continuous functions with sign changes at the interval endpoints.
 
-\vspace{0.3em}
 \begin{algorithm}[H]
 \caption{Optimized Trisection-False Position}
 \begin{algorithmic}[1]
@@ -260,7 +253,6 @@ The trisection approach provides a theoretical advantage over bisection by poten
 \State \Return $max\_iter, (a + b)/2, f((a + b)/2), a, b$
 \end{algorithmic}
 \end{algorithm}
-\vspace{0.2em}
 
 \subsubsection{Algorithm 4: Optimized Trisection-False Position with Modified Secant (Optimized\_TFMS)}
 
@@ -294,7 +286,6 @@ The algorithm is defined with the method signature Optimized\_TFMS$(f, a, b, tol
 
 This algorithm represents the pinnacle of the hybrid approach, demonstrating that sophisticated combinations of numerical techniques can achieve superior performance without compromising reliability. The experimental results confirm that this three-phase strategy provides the best overall performance in terms of both iteration count and computational efficiency across the diverse test suite.
 
-\vspace{0.3em}
 \begin{algorithm}[H]
 \caption{Algorithm 4: Optimized Trisection-False Position with Modified Secant}
 \begin{algorithmic}[1]
@@ -347,7 +338,6 @@ This algorithm represents the pinnacle of the hybrid approach, demonstrating tha
 \State \Return $max\_iter, 0.5 \times (a + b), f(0.5 \times (a + b)), a, b$
 \end{algorithmic}
 \end{algorithm}
-\vspace{0.2em}
 
 \section{Experimental Setup}
 
@@ -443,7 +433,6 @@ The experimental results demonstrate the superior performance of the proposed hy
 
 The experimental results reveal significant performance improvements achieved by the hybrid algorithms. Table \ref{tab:performance_comparison} presents the comprehensive performance metrics for all nine algorithms, including the four proposed hybrid methods and five traditional/baseline methods for comparison.
 
-\vspace{0.3em}
 \begin{table}[H]
 \centering
 \caption{Comprehensive Performance Comparison of All Algorithms. This table summarizes the average CPU time and average number of iterations for each algorithm across all test problems, providing a direct comparison of computational efficiency and convergence speed. The results demonstrate the superior performance of the proposed hybrid algorithms.}
@@ -464,7 +453,6 @@ Algorithm & Avg CPU Time (s) & Avg Iterations \\
 \bottomrule
 \end{tabular}
 \end{table}
-\vspace{0.2em}
 
 The results demonstrate several key findings:
 
@@ -586,7 +574,6 @@ The experimental results also highlight the importance of careful algorithm desi
 
 Future research directions could include the development of adaptive hybrid algorithms that automatically select the most appropriate combination of methods based on function characteristics, the extension of these approaches to multi-dimensional root finding problems, and the integration of machine learning techniques for parameter optimization. Additionally, the application of these algorithms to real-world problems in engineering, physics, and other scientific disciplines would provide valuable validation of their practical utility.
 
-\clearpage
 \section*{References}
 
 \begin{thebibliography}{99}
@@ -638,6 +625,36 @@ Remani, C. (2012). \textit{Numerical Methods for Solving Systems of Nonlinear Eq
 
 \bibitem{lally2015arxiv}
 Lally, C. H. (2015). A faster, high precision algorithm for calculating symmetric and asymmetric. \textit{arXiv preprint}, arXiv:1509.01831.
+
+\bibitem{ehiwario2014bisection}
+Ehiwario, J.C., \& Aghamie, S.O. (2014). Comparative Study of Bisection, Newton-Raphson and Secant Methods of Root-Finding Problems. \textit{IOSR J. Eng.}, 4, 1-7.
+
+\bibitem{srivastava2011comparison}
+Srivastava, R.B., \& Srivastava, S. (2011). Comparison of numerical rate of convergence of bisection, Newton and secant methods. \textit{J. Chem. Biol. Phys. Sci.}, 2, 472-479.
+
+\bibitem{baskar2016introduction}
+Baskar, S., \& Ganesh, S.S. (2016). Introduction to Numerical Analysis. Department of Mathematics, Indian Institute of Technology Bombay Powai, Mumbai, India.
+
+\bibitem{moazzam2012robust}
+Moazzam, G., Chakraborty, A., \& Bhuiyan, A. (2012). A robust method for solving transcendental equations. \textit{Int. J. Comput. Sci. Issues}, 9, 413-419.
+
+\bibitem{ait2014geometric}
+Ait-Aoudia, S., \& Mana, I. (2004). Numerical solving of geometric constraints by bisection: A distributed approach. \textit{Int. J. Comput. Inf. Sci.}, 2, 66.
+
+\bibitem{chapra2015numerical}
+Chapra, S.C., \& Canale, R.P. (2015). Numerical Methods for Engineers, 7th ed., McGraw-Hill, Boston, MA, USA.
+
+\bibitem{heydari2011optimal}
+Heydari, M., Hosseini, S.M., \& Loghmani, G.B. (2011). On two new families of iterative methods for solving nonlinear equations with optimal order. \textit{Applicable Anal. Discrete Math.}, 5(1), 93-109.
+
+\bibitem{mansouri2015bee}
+Mansouri, P., Asady, B., \& Gupta, N. (2015). The Bisection–Artificial Bee Colony algorithm to solve Fixed point problems. \textit{Appl. Soft Comput.}, 26, 143-148.
+
+\bibitem{karaboga2007abc}
+Karaboga, D., \& Basturk, B. (2007). A powerful and efficient algorithm for numerical function optimization: artificial bee colony (ABC) algorithm. \textit{J Glob Optim}, 39(3), 459-471.
+
+\bibitem{nayak2012genetic}
+Nayak, T., \& Dash, T. (2012). Solution to quadratic equation using genetic algorithm. In Proceedings of the National Conference on AIRES-2012, Vishakhapatnam, India, 29–30 June 2012.
 
 \end{thebibliography}
 
