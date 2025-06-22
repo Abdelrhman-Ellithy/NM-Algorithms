@@ -30,6 +30,9 @@
 \titleformat{\subsection}[hang]{\raggedright\bfseries}{\thesubsection}{1em}{}
 \titleformat{\subsubsection}[hang]{\raggedright\bfseries}{\thesubsubsection}{1em}{}
 
+% Reduce paragraph spacing for algorithm descriptions
+\setlength{\parskip}{1em}
+
 \begin{document}
 
 \pagestyle{plain}
@@ -59,7 +62,9 @@ Recent advances in root-finding algorithms have focused on improving the converg
 
 The main contributions of this paper are as follows. First, we present four novel hybrid algorithms, each with a solid mathematical foundation, that blend the best aspects of existing root-finding techniques. Second, we provide a comprehensive performance analysis of these algorithms on a diverse set of test functions, demonstrating their effectiveness and generality. Third, we detail the implementation of these methods using the SymPy library for symbolic computation, which allows for high-precision and flexible experimentation. Finally, we offer a comparative analysis with traditional methods, highlighting the advantages and potential of the proposed hybrid approaches in practical numerical computation scenarios.
 
-\section{Methodology}
+This paper is organized as follows. Section~\ref{sec:methodology} (page~\pageref{sec:methodology}) details the methodology and mathematical foundations of the proposed algorithms. Section~\ref{sec:experimental} (page~\pageref{sec:experimental}) describes the experimental setup and test functions. Section~\ref{sec:results} (page~\pageref{sec:results}) presents the results and analysis. Section~\ref{sec:discussion} (page~\pageref{sec:discussion}) discusses the implications and limitations. Section~\ref{sec:conclusion} (page~\pageref{sec:conclusion}) concludes the paper and outlines future research directions.
+
+\section{Methodology}\label{sec:methodology}
 
 The methodology adopted in this study is centered on the design and development of four hybrid root bracketing algorithms. Each algorithm is constructed by integrating the strengths of traditional bracketing methods with optimization-based enhancements. For example, the Optimized Bisection-False Position (Optimized\_BF) algorithm leverages the interval-halving reliability of bisection and the faster convergence of the false position method. The Optimized\_BFMS algorithm incorporates a modified secant step to further accelerate convergence. The trisection-based variants, Optimized\_TF and Optimized\_TFMS, use a three-way interval split and integrate both false position and secant-based acceleration. All algorithms are implemented using the SymPy library, which provides symbolic computation capabilities and high-precision arithmetic. The mathematical foundations of these methods are rooted in the Intermediate Value Theorem, linear interpolation, and finite-difference approximations for derivative estimation.
 
@@ -339,7 +344,10 @@ This algorithm represents the pinnacle of the hybrid approach, demonstrating tha
 \end{algorithmic}
 \end{algorithm}
 
-\section{Experimental Setup}
+% Restore default paragraph spacing after algorithm descriptions
+\setlength{\parskip}{1.5ex plus 0.5ex minus 0.2ex}
+
+\section{Experimental Setup}\label{sec:experimental}
 
 The experimental framework was designed to provide a comprehensive evaluation of the proposed hybrid algorithms across a diverse range of mathematical functions. The study employed a rigorous methodology that ensures fair comparison, statistical significance, and practical relevance. The experimental setup encompasses four key components: a comprehensive test suite of mathematical functions, a robust implementation framework using SymPy, precise performance measurement protocols, and a systematic data collection and analysis system.
 
@@ -425,7 +433,7 @@ This methodology is consistent with best practices in recent hybrid algorithm li
 
 The experimental setup ensures that all algorithms are tested under identical conditions, with the same computational environment, precision settings, and measurement methodology. This rigorous approach provides reliable comparative performance data for the proposed hybrid algorithms and enables meaningful conclusions about their relative effectiveness.
 
-\section{Results and Analysis}
+\section{Results and Analysis}\label{sec:results}
 
 The experimental results demonstrate the superior performance of the proposed hybrid algorithms compared to traditional numerical methods. This section presents a comprehensive analysis of the performance data, including detailed comparisons across all algorithms and test functions, statistical significance of the results, and practical implications for numerical computing applications.
 
@@ -600,15 +608,7 @@ Figure~\ref{fig:fastest_algorithm_per_problem} shows which algorithm is the fast
 
 Figure~\ref{fig:top3_fastest_algorithms} compares the CPU time per problem for the top three fastest algorithms, highlighting their performance across the test suite.
 
-\section{Conclusion}
-
-This paper presented four novel hybrid root bracketing algorithms that combine traditional bracketing methods with optimization techniques. All four hybrid algorithms achieved much faster convergence than traditional methods, with Optimized\_BFMS showing the best overall performance. The algorithms maintained a 100\% success rate across all test functions, and the average iteration count was reduced by over 90\% compared to classical approaches. These results highlight the effectiveness of optimization-based hybrid methods in numerical root finding and suggest their immediate applicability to a wide range of scientific and engineering problems.
-
-Theoretical contributions include the development of four new hybrid algorithms that blend bracketing and optimization-based enhancements, maintaining guaranteed convergence while improving speed. The experimental analysis, using a diverse set of 14 test functions and a rigorous, high-precision framework, confirmed the statistical significance and robustness of the results.
-
-Future work may explore adaptive hybrid algorithms, multi-dimensional extensions, and integration with machine learning for parameter optimization, as well as real-world applications in science and engineering.
-
-\section{Discussion}
+\section{Discussion}\label{sec:discussion}
 
 The hybrid algorithms developed in this work demonstrate rapid convergence, achieving the root in three iterations or fewer for most problems. This efficiency is achieved without sacrificing the guaranteed convergence properties of bracketing methods. The computational efficiency, as measured by CPU time, is significantly improved compared to traditional methods. Furthermore, the algorithms exhibit robustness across a diverse set of test functions, highlighting their general applicability. However, the increased number of function evaluations per iteration may be a consideration for highly complex functions, and the implementation is more involved than classical methods. Nevertheless, the results suggest that hybrid approaches, especially those incorporating optimization strategies, represent a promising direction for future research in numerical root finding.
 
@@ -625,6 +625,14 @@ The implications of these findings are significant for the field of numerical me
 The experimental results also highlight the importance of careful algorithm design and implementation. The error handling mechanisms for division by zero scenarios, the choice of the secant parameter $\delta$, and the convergence tolerance settings all contribute to the algorithms' robustness. The database-driven experimental framework allows for comprehensive performance analysis and facilitates future comparative studies with other numerical methods.
 
 Future research directions could include the development of adaptive hybrid algorithms that automatically select the most appropriate combination of methods based on function characteristics, the extension of these approaches to multi-dimensional root finding problems, and the integration of machine learning techniques for parameter optimization. Additionally, the application of these algorithms to real-world problems in engineering, physics, and other scientific disciplines would provide valuable validation of their practical utility.
+
+\section{Conclusion}\label{sec:conclusion}
+
+This paper presented four novel hybrid root bracketing algorithms that combine traditional bracketing methods with optimization techniques. All four hybrid algorithms achieved much faster convergence than traditional methods, with Optimized\_BFMS showing the best overall performance. The algorithms maintained a 100\% success rate across all test functions, and the average iteration count was reduced by over 90\% compared to classical approaches. These results highlight the effectiveness of optimization-based hybrid methods in numerical root finding and suggest their immediate applicability to a wide range of scientific and engineering problems.
+
+Theoretical contributions include the development of four new hybrid algorithms that blend bracketing and optimization-based enhancements, maintaining guaranteed convergence while improving speed. The experimental analysis, using a diverse set of 14 test functions and a rigorous, high-precision framework, confirmed the statistical significance and robustness of the results.
+
+Future work may explore adaptive hybrid algorithms, multi-dimensional extensions, and integration with machine learning for parameter optimization, as well as real-world applications in science and engineering.
 
 \section*{References}
 
