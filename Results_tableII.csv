@@ -1,0 +1,18 @@
+Unnamed: 0,Bisection,False position,Trisection,Blend BisectionFalse,Blend Trisection False,Unnamed: 6,Optimized-Bisection-FalsePosition,Optimized-Trisection-FalsePosition,Optimized-Bisection-FalsePosition-Modified Secant,Optimized_Trisection-FalsePosition-Modified Secant
+Problem 1,45.0,28.0,32.0,10.0,7,,9.0,7.0,3.0,3.0
+Problem 2,48.0,39.0,28.0,8.0,7,,8.0,5.0,3.0,3.0
+Problem 3,49.0,37.0,1.0,2.0,1,,8.0,1.0,3.0,1.0
+Problem 4,44.0,11.0,29.0,8.0,7,,7.0,6.0,3.0,3.0
+Problem 5,47.0,16.0,31.0,8.0,7,,7.0,6.0,3.0,3.0
+Problem 6,45.0,16.0,29.0,7.0,5,,8.0,7.0,3.0,3.0
+Problem 7,47.0,37.0,28.0,7.0,7,,6.0,6.0,3.0,3.0
+Problem 8,46.0,44.0,28.0,9.0,7,,9.0,7.0,3.0,3.0
+Problem 9,48.0,15.0,26.0,8.0,6,,8.0,5.0,3.0,3.0
+Problem 10,46.0,6.0,28.0,6.0,5,,5.0,5.0,3.0,3.0
+Problem 11,45.0,12.0,28.0,10.0,8,,8.0,6.0,3.0,3.0
+Problem 12,50.0,138.0,31.0,12.0,9,,11.0,8.0,4.0,5.0
+Problem 13,49.0,37.0,1.0,2.0,1,,8.0,1.0,3.0,1.0
+Problem 14,48.0,20.0,29.0,5.0,7,,7.0,7.0,3.0,3.0
+Averege,46.92857142857143,32.57142857142857,24.928571428571427,7.285714285714286,6,,7.785714285714286,5.5,3.0714285714285716,2.857142857142857
+Median,47.0,24.0,28.0,8.0,7,,8.0,6.0,3.0,3.0
+Mode,45.0,37.0,28.0,8.0,7,,8.0,7.0,3.0,3.0
