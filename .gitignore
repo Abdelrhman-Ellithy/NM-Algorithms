@@ -169,3 +169,38 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+# LaTeX build files
+# Ignore all LaTeX build files in the directory
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.synctex.gz
+*.pdf
+
+# Do not ignore the main paper PDF
+!hybrid_root_bracketing_paper.pdf
+
+# Sample Latex Paper Format build files
+Sample Latex Paper Format file.aux
+Sample Latex Paper Format file.bbl
+Sample Latex Paper Format file.blg
+Sample Latex Paper Format file.fdb_latexmk
+Sample Latex Paper Format file.fls
+Sample Latex Paper Format file.log
+Sample Latex Paper Format file.out
+Sample Latex Paper Format file.synctex.gz
+Sample Latex Paper Format file.pdf
+
+# Reference papers folder
+Refrence Papers/
+
+# Analysis script
+analyze_results.py
+
+# Sample Latex Paper Format source
+Sample Latex Paper Format file.tex
