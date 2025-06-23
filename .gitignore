@@ -181,6 +181,9 @@ cython_debug/
 *.out
 *.synctex.gz
 *.pdf
+*.bib
+*.pdf
+Sample Latex Paper Format file.tex
 
 # Do not ignore the main paper PDF
 !hybrid_root_bracketing_paper.pdf
