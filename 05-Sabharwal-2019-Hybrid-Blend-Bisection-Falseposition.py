@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 Created on Wed Mar 20 08:54:54 2024
-
+Implements Sabharwal's Blended Algorithm (Bisection + False Position), Algorithm 3, page 11.
 @author: Abdelrahman Ellithy
 """
 import sympy as sp
@@ -19,7 +19,6 @@ def rest_data():
             )""")
     con.commit()
     con.close()
-
 def record_speeds(records):
     try:
         with sqlite3.connect('Results.db') as con:
@@ -29,11 +28,9 @@ def record_speeds(records):
     except sqlite3.Error as e:
         print(f"Database error: {e}")
     
-def blendTF(f, a, b, tol, max_iter=1000):
+def blendBF(f, a, b, tol, max_iter=1000):
     """
-    This function implements the Hybrid Method of Trisection and False-Position to find
-    a root  of the function (f) within the interval [a, b] with a given tolerance (tol).
-    
+    Implements Sabharwal's Blended Algorithm (Bisection + False Position), Algorithm 3, page 11.
     Parameters:
         f   (function): The function for which we want to find a root.\n
         a      (float): The lower bound of the initial interval.\n
@@ -52,7 +49,7 @@ def blendTF(f, a, b, tol, max_iter=1000):
     # Initialize the iteration counter
     n = 0
     
-    # Define the trisection interval [a1, b1]
+    # Define the bisection interval [a1, b1]
     a1 = a
     b1 = b
     
@@ -69,25 +66,19 @@ def blendTF(f, a, b, tol, max_iter=1000):
         fa = f(a)
         fb = f(b)
         
-        # Calculate xT1 and xT2 using the trisection method
-        xT1 = (b + 2*a) / 3
-        xT2 = (2*b + a) / 3
-        fxT1 = f(xT1)
-        fxT2 = f(xT2)
+        # Calculate xB using the bisection method
+        xB = (a + b) / 2
+        fxB = f(xB)
         
         # Calculate xF using the false-position method
-        xF = a - (fa*(b-a)) / (fb-fa)
+        xF = (a*fb - b*fa) / (fb - fa)
         fxF = f(xF)
         
         # Choose the root with the smaller error
-        x = xT1
-        fx = fxT1
-        
-        if abs(fxT2) < abs(fx):
-            x = xT2
-            fx = fxT2
-        
-        if abs(fxF) < abs(fx):
+        if abs(fxB) < abs(fxF):
+            x = xB
+            fx = fxB
+        else:
             x = xF
             fx = fxF
         
@@ -95,17 +86,14 @@ def blendTF(f, a, b, tol, max_iter=1000):
         if abs(fx) <= tol:
             break
         
-        # Determine the new trisection interval [a1, b1]
-        if fa * fxT1 < 0:
-            b1 = xT1
-        elif fxT1 * fxT2 < 0:
-            a1 = xT1
-            b1 = xT2
+        # Determine the new bisection interval [a1, b1]
+        if fa*fxB < 0:
+            b1 = xB
         else:
-            a1 = xT2
+            a1 = xB
         
         # Determine the new false-position interval [a2, b2]
-        if fa * fxF < 0:
+        if fa*fxF < 0:
             b2 = xF
         else:
             a2 = xF
@@ -113,7 +101,7 @@ def blendTF(f, a, b, tol, max_iter=1000):
         # Take the intersection between [a1, b1] and [a2, b2]
         a = max(a1, a2)
         b = min(b1, b2)
-    
+        
     # Return the number of iterations, estimated root, function value, lower bound, and upper bound
     return n, x, fx, a, b
 
@@ -138,7 +126,7 @@ dataset=[
          ,(x**2+2*x-7,1,3)
          ]
 tol = 1e-14
-method='04-Hybrid-Blend-Trisection-Falseposition'
+method='05-Sabharwal-2019-Hybrid-Blend-Bisection-Falseposition'
 print(method)
 rest_data()
 print("\t\tIter\t\t Root\t\tFunction Value\t\t Lower Bound\t\t Upper Bound\t\t Time")
@@ -148,12 +136,11 @@ for c in range(1000):
         f = sp.lambdify('x', func)
         t1 = time.perf_counter()
         for j in range(100):
-            n, x_val, fx, a_val, b_val = blendTF(f, a, b, tol)
+            n, x_val, fx, a_val, b_val = blendBF(f, a, b, tol)
         t2 = time.perf_counter()
         t = t2 - t1
         records.append((i+1, method, t))
         print(f"problem{i+1}| \t{n} \t {x_val:.16f} \t {fx:.16f} \t {a_val:.16f} \t {b_val:.16f} \t {t:.20f}")
 
-# Batch insert all records at once
 if records:
     record_speeds(records)

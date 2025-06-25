@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 Created on Wed Mar 20 08:54:54 2024
-
+Implements Badr-2021-A Comparative Study among New Hybrid Root Finding Algorithms and Traditional Method (Trisection + False Position), Algorithm 7, page 8.
 @author: Abdelrahman Ellithy
 """
 import sympy as sp
@@ -19,6 +19,7 @@ def rest_data():
             )""")
     con.commit()
     con.close()
+
 def record_speeds(records):
     try:
         with sqlite3.connect('Results.db') as con:
@@ -28,9 +29,10 @@ def record_speeds(records):
     except sqlite3.Error as e:
         print(f"Database error: {e}")
     
-def blendBF(f, a, b, tol, max_iter=1000):
+def blendTF(f, a, b, tol, max_iter=1000):
     """
-    This function implements the Hybrid Method of Bisection and False-Position to find
+    Implements Badr-2021-A Comparative Study among New Hybrid Root Finding Algorithms and Traditional Method (Trisection + False Position), Algorithm 7, page 8.
+    This function implements the Hybrid Method of Trisection and False-Position to find
     a root  of the function (f) within the interval [a, b] with a given tolerance (tol).
     
     Parameters:
@@ -51,7 +53,7 @@ def blendBF(f, a, b, tol, max_iter=1000):
     # Initialize the iteration counter
     n = 0
     
-    # Define the bisection interval [a1, b1]
+    # Define the trisection interval [a1, b1]
     a1 = a
     b1 = b
     
@@ -68,19 +70,25 @@ def blendBF(f, a, b, tol, max_iter=1000):
         fa = f(a)
         fb = f(b)
         
-        # Calculate xB using the bisection method
-        xB = (a + b) / 2
-        fxB = f(xB)
+        # Calculate xT1 and xT2 using the trisection method
+        xT1 = (b + 2*a) / 3
+        xT2 = (2*b + a) / 3
+        fxT1 = f(xT1)
+        fxT2 = f(xT2)
         
         # Calculate xF using the false-position method
-        xF = (a*fb - b*fa) / (fb - fa)
+        xF = a - (fa*(b-a)) / (fb-fa)
         fxF = f(xF)
         
         # Choose the root with the smaller error
-        if abs(fxB) < abs(fxF):
-            x = xB
-            fx = fxB
-        else:
+        x = xT1
+        fx = fxT1
+        
+        if abs(fxT2) < abs(fx):
+            x = xT2
+            fx = fxT2
+        
+        if abs(fxF) < abs(fx):
             x = xF
             fx = fxF
         
@@ -88,14 +96,17 @@ def blendBF(f, a, b, tol, max_iter=1000):
         if abs(fx) <= tol:
             break
         
-        # Determine the new bisection interval [a1, b1]
-        if fa*fxB < 0:
-            b1 = xB
+        # Determine the new trisection interval [a1, b1]
+        if fa * fxT1 < 0:
+            b1 = xT1
+        elif fxT1 * fxT2 < 0:
+            a1 = xT1
+            b1 = xT2
         else:
-            a1 = xB
+            a1 = xT2
         
         # Determine the new false-position interval [a2, b2]
-        if fa*fxF < 0:
+        if fa * fxF < 0:
             b2 = xF
         else:
             a2 = xF
@@ -103,7 +114,7 @@ def blendBF(f, a, b, tol, max_iter=1000):
         # Take the intersection between [a1, b1] and [a2, b2]
         a = max(a1, a2)
         b = min(b1, b2)
-        
+    
     # Return the number of iterations, estimated root, function value, lower bound, and upper bound
     return n, x, fx, a, b
 
@@ -128,7 +139,7 @@ dataset=[
          ,(x**2+2*x-7,1,3)
          ]
 tol = 1e-14
-method='05-Hybrid-Blend-Bisection-Falseposition'
+method='04-Badr-2021-A Comparative Study among New Hybrid Root Finding Algorithms-Hybrid-Blend-Trisection-Falseposition'
 print(method)
 rest_data()
 print("\t\tIter\t\t Root\t\tFunction Value\t\t Lower Bound\t\t Upper Bound\t\t Time")
@@ -138,12 +149,11 @@ for c in range(1000):
         f = sp.lambdify('x', func)
         t1 = time.perf_counter()
         for j in range(100):
-            n, x_val, fx, a_val, b_val = blendBF(f, a, b, tol)
+            n, x_val, fx, a_val, b_val = blendTF(f, a, b, tol)
         t2 = time.perf_counter()
         t = t2 - t1
         records.append((i+1, method, t))
         print(f"problem{i+1}| \t{n} \t {x_val:.16f} \t {fx:.16f} \t {a_val:.16f} \t {b_val:.16f} \t {t:.20f}")
 
-# Batch insert all records at once
 if records:
     record_speeds(records)
