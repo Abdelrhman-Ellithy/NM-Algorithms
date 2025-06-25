@@ -78,28 +78,26 @@ The theoretical convergence analysis follows the framework established by \cite{
 
 For the false position method, the convergence rate is typically superlinear, with the error reduction following the pattern $|x_{n+1} - \alpha| \leq C \cdot |x_n - \alpha|^p$, where $p > 1$ and $C$ is a constant depending on the function properties. The modified secant method, using finite difference approximation, maintains similar convergence characteristics while avoiding the need for explicit derivative calculations.
 
-{\titlespacing*{\subsection}{0pt}{1.0ex plus .2ex minus .2ex}{0ex} % Zero after-spacing
-\titlespacing*{\subsubsection}{0pt}{0ex}{0.2ex} % Zero before, minimal after
 \subsection{Algorithm Design, Hybrid Techniques and Pseudocode for Proposed Algorithms}
+
 \vspace{-1.2ex} % Pull subsubsection up
+
+% New introductory paragraph
+Root-finding for nonlinear equations is a fundamental problem in numerical analysis, with wide-ranging applications in science and engineering. Classical bracketing methods such as bisection and false position are robust but can be slow, while open methods like secant and Newton's method are faster but may lack guaranteed convergence. Hybrid algorithms seek to combine the strengths of these approaches, achieving both reliability and efficiency. In this work, we propose four novel hybrid root-bracketing algorithms, each designed to address specific limitations of existing methods and to optimize convergence speed while preserving the bracketing property. Below, we present the design rationale, mathematical formulation, and pseudocode for each algorithm.
+
+% --- Algorithm 1 ---
+
 \subsubsection{Algorithm 1: Optimized Bisection-False Position (Optimized\_BF)}
 \vspace{-0.8ex} % Pull text up
-}
-The Optimized Bisection-False Position (Optimized\_BF) algorithm represents a sophisticated hybrid root-finding approach that strategically combines the guaranteed convergence of the bisection method with the accelerated convergence potential of the false position (regula falsi) method. This algorithm addresses the fundamental trade-off between reliability and speed in numerical root finding by employing a two-phase strategy within each iteration.
+The Optimized Bisection-False Position (Optimized\_BF) algorithm is a two-phase hybrid method that strategically combines the guaranteed convergence of the bisection method with the accelerated convergence potential of the false position (regula falsi) method. The motivation for this hybridization is to overcome the slow, linear convergence of bisection while retaining its reliability, by introducing the interpolation-based acceleration of the false position step.
 
-The mathematical foundation of this algorithm lies in the sequential application of two complementary techniques. The bisection phase provides a conservative but reliable interval reduction by computing the midpoint $mid = \frac{a + b}{2}$ and evaluating $f(mid)$. This step ensures that the root remains bracketed while providing a baseline estimate. The subsequent false position phase leverages linear interpolation between the interval endpoints to compute a potentially more accurate estimate using the formula:
-
+The algorithm operates as follows: In each iteration, the bisection phase computes the midpoint $mid = \frac{a + b}{2}$ and evaluates $f(mid)$, ensuring the root remains bracketed. The subsequent false position phase leverages linear interpolation between the interval endpoints to compute a potentially more accurate estimate using:
 \begin{equation}
 fp = \frac{a \cdot f(b) - b \cdot f(a)}{f(b) - f(a)}
 \end{equation}
+The algorithm then selects the estimate (midpoint or false position) with the smaller absolute function value, updating the interval accordingly to maintain the bracketing property. This approach ensures that even if the false position step is less effective for certain function shapes, the bisection step provides a fallback, guaranteeing progress toward the root.
 
-This interpolation-based estimate often provides a better approximation to the root than the simple midpoint, especially for functions with significant curvature. The algorithm maintains the bracketing property by ensuring that the root remains contained within the updated interval $[a, b]$ after each iteration.
-
-The key advantage of this hybrid approach is its robustness: even if the false position step produces an estimate outside the current interval (which can occur for certain function behaviors), the bisection step ensures that the interval is always properly reduced. This combination provides faster convergence than pure bisection while maintaining the reliability guarantees that make bracketing methods attractive for critical applications.
-
-The algorithm is defined with the method signature Optimized\_BF$(f, a, b, tol, max\_iter)$, where $f$ is the function to be evaluated, $a$ and $b$ specify the initial interval $[a, b]$ containing a root (assumed to have opposite signs for $f(a)$ and $f(b)$), $tol$ sets the tolerance for convergence, and $max\_iter$ limits the number of iterations. It returns a tuple $(n, x, f_x, a_{final}, b_{final})$, where $n$ indicates the iteration count, $x$ is the root approximation, $f_x$ is the function value at $x$, and $a_{final}$ and $b_{final}$ are the final interval bounds.
-
-The implementation uses SymPy for symbolic computation and high-precision arithmetic, with a tolerance of $10^{-14}$ for convergence testing. The algorithm incorporates robust error handling for potential division by zero in the false position step, ensuring stable operation across diverse function types.
+The key innovation is the dynamic selection between midpoint and false position estimates, which adapts to the local function behavior. This results in faster convergence than pure bisection, especially for functions with significant curvature, while maintaining the reliability guarantees of bracketing methods. The method signature is Optimized\_BF$(f, a, b, tol, max\_iter)$, returning $(n, x, f_x, a_{final}, b_{final})$ as the iteration count, root approximation, function value, and final interval bounds. Robust error handling is included for division by zero in the false position step.
 
 \begin{algorithm}[H]
 \caption{Optimized Bisection-False Position (Optimized\_BF)}
@@ -130,29 +128,22 @@ The implementation uses SymPy for symbolic computation and high-precision arithm
 \end{algorithmic}
 \end{algorithm}
 
+% --- Algorithm 2 ---
+
 \subsubsection{Algorithm 2: Optimized Bisection-False Position with Modified Secant (Optimized\_BFMS)}
 
-The Optimized Bisection-False Position with Modified Secant (Optimized\_BFMS) algorithm represents an advanced three-phase hybrid approach that builds upon the Optimized\_BF framework by incorporating a modified secant step for enhanced convergence acceleration. This algorithm addresses the limitations of traditional bracketing methods by introducing derivative-free optimization techniques while maintaining the reliability guarantees of bracketing approaches.
+The Optimized Bisection-False Position with Modified Secant (Optimized\_BFMS) algorithm extends the Optimized\_BF framework by incorporating a third phase: a derivative-free modified secant step. The motivation is to further accelerate convergence, especially near the root, by leveraging local slope information without requiring explicit derivatives.
 
-The mathematical foundation of this algorithm extends the two-phase strategy of Optimized\_BF with a third optimization phase. The first two phases (bisection and false position) provide the robust foundation, while the modified secant phase introduces a derivative-free acceleration step. The modified secant method approximates the derivative using finite differences:
-
+After the bisection and false position phases, the algorithm computes a secant-based estimate using a finite difference approximation:
 \begin{equation}
 f'(x) \approx \frac{f(x + \delta) - f(x)}{\delta}
 \end{equation}
-
-where $\delta = 10^{-4}$ is a carefully chosen perturbation parameter that balances numerical stability with approximation accuracy. This approximation enables the computation of a secant estimate:
-
 \begin{equation}
-x_S = x - \frac{f(x)}{f'(x)} \approx x - \frac{\delta \cdot f(x)}{f(x + \delta) - f(x)}
+x_S = x - \frac{\delta \cdot f(x)}{f(x + \delta) - f(x)}
 \end{equation}
+where $\delta = 10^{-4}$ is chosen for numerical stability. The secant estimate $x_S$ is only accepted if it lies within the current interval and provides a better approximation (smaller $|f(x_S)|$) than the previous step. This conservative acceptance criterion ensures the bracketing property is preserved and prevents divergence due to poor secant approximations.
 
-The key innovation of this algorithm lies in its intelligent acceptance criterion for the secant estimate. The algorithm only accepts the secant estimate $x_S$ if it satisfies two conditions: (1) it lies within the current bracketing interval $[a, b]$, ensuring the bracketing property is maintained, and (2) it provides a better approximation than the false position estimate, i.e., $|f(x_S)| < |f(fp)|$. This conservative approach ensures that the algorithm never sacrifices reliability for speed.
-
-The advantages of this three-phase approach are manifold. First, the bisection phase guarantees robust interval reduction. Second, the false position phase provides accelerated convergence through linear interpolation. Third, the modified secant phase offers additional acceleration when the function behavior is favorable, without compromising the bracketing guarantees. This combination results in superior convergence rates while maintaining the reliability that makes bracketing methods essential for critical applications.
-
-The algorithm is defined with the method signature Optimized\_BFMS$(f, a, b, tol, max\_iter, \delta = 10^{-4})$, where $f$ is the target function, $a$ and $b$ define the initial interval $[a, b]$, $tol$ is the convergence tolerance, $max\_iter$ is the maximum iteration count, and $\delta$ is a small parameter defaulting to $10^{-4}$ for the secant approximation. It returns $(n, x, f_x, a_{final}, b_{final})$, with $n$ as the iteration count, $x$ as the root approximation, $f_x$ as the function value at $x$, and $a_{final}$ and $b_{final}$ as the final interval bounds.
-
-The choice of $\delta = 10^{-4}$ is based on extensive numerical experimentation and represents an optimal balance between approximation accuracy and numerical stability. Smaller values of $\delta$ provide more accurate derivative approximations but may lead to numerical instability, while larger values ensure stability but may reduce the effectiveness of the secant acceleration.
+The three-phase structure—bisection, false position, and modified secant—enables the algorithm to adaptively exploit the most effective strategy at each stage, resulting in superior convergence rates while maintaining reliability. The method signature is Optimized\_BFMS$(f, a, b, tol, max\_iter, \delta = 10^{-4})$, returning $(n, x, f_x, a_{final}, b_{final})$. The choice of $\delta$ is based on empirical testing for optimal balance between accuracy and stability.
 
 \begin{algorithm}[H]
 \caption{Optimized Bisection-False Position with Modified Secant (Optimized\_BFMS)}
@@ -200,25 +191,19 @@ The choice of $\delta = 10^{-4}$ is based on extensive numerical experimentation
 \end{algorithmic}
 \end{algorithm}
 
+% --- Algorithm 3 ---
+
 \subsubsection{Algorithm 3: Optimized Trisection-False Position (Optimized\_TF)}
 
-The Optimized Trisection-False Position (Optimized\_TF) algorithm represents an innovative hybrid approach that leverages the theoretical advantages of trisection over traditional bisection while incorporating the convergence acceleration of the false position method. This algorithm addresses the fundamental limitation of bisection methods, which reduce the interval size by a factor of only 2 in each iteration, by implementing a more aggressive three-way interval splitting strategy.
-
-The mathematical foundation of this algorithm is based on the trisection principle, which divides the interval $[a, b]$ into three equal subintervals by computing two interior points:
-
+The Optimized Trisection-False Position (Optimized\_TF) algorithm introduces a more aggressive interval reduction strategy by employing trisection instead of bisection, motivated by the desire to accelerate convergence for functions where the root is not near the endpoints. Trisection divides the interval $[a, b]$ into three equal parts, computing two interior points:
 \begin{equation}
 x_1 = a + \frac{b - a}{3} \quad \text{and} \quad x_2 = b - \frac{b - a}{3}
 \end{equation}
+This approach can reduce the interval size by up to a factor of 3 per iteration, compared to 2 for bisection, as analyzed by \cite{demir2008trisection}.
 
-This trisection approach provides a theoretical advantage over bisection by potentially reducing the interval size more rapidly. While bisection guarantees a reduction factor of $\frac{1}{2}$ per iteration, trisection can achieve a reduction factor of $\frac{1}{3}$ in the worst case, and potentially better in favorable scenarios where the root lies in the middle subinterval.
+In each iteration, the algorithm first uses trisection to identify the subinterval containing the root by evaluating $f(x_1)$ and $f(x_2)$ and checking sign changes. It then applies the false position method within the identified subinterval, using linear interpolation to further accelerate convergence. The algorithm selects the best candidate (from trisection or false position) based on the smallest absolute function value, and updates the interval to maintain the bracketing property.
 
-The algorithm operates in two distinct phases within each iteration. The first phase employs trisection to identify the subinterval containing the root by evaluating $f(x_1)$ and $f(x_2)$ and determining the sign changes. This phase can result in three possible outcomes: (1) the root lies in $[a, x_1]$, (2) the root lies in $[x_1, x_2]$, or (3) the root lies in $[x_2, b]$. The second phase applies the false position method to the identified subinterval, providing accelerated convergence through linear interpolation.
-
-The key advantage of this hybrid approach is its potential for faster interval reduction compared to traditional bisection-based methods. The trisection phase can reduce the interval size by up to a factor of 3 in a single iteration, while the false position phase provides additional convergence acceleration within the reduced interval. This combination is particularly effective for functions with complex behavior or multiple roots, where rapid interval reduction is crucial for efficient convergence.
-
-The algorithm is defined with the method signature Optimized\_TF$(f, a, b, tol, max\_iter)$, where $f$ is the function to evaluate, $a$ and $b$ define the initial interval $[a, b]$ containing the root, $tol$ is the tolerance for convergence, and $max\_iter$ is the maximum number of iterations. It returns $(n, x, f_x, a_{final}, b_{final})$, with $n$ as the iteration count, $x$ as the root approximation, $f_x$ as the function value at $x$, and $a_{final}$ and $b_{final}$ as the final interval bounds.
-
-The trisection approach provides a theoretical advantage over bisection by potentially reducing the interval size more rapidly, as analyzed by \cite{demir2008trisection}. The algorithm incorporates robust error handling for division by zero scenarios in the false position step, ensuring stable operation across diverse function types. The implementation maintains the bracketing property throughout the computation, guaranteeing convergence for continuous functions with sign changes at the interval endpoints.
+The key advantage is the potential for much faster interval reduction, especially for functions with complex or oscillatory behavior. The method signature is Optimized\_TF$(f, a, b, tol, max\_iter)$, returning $(n, x, f_x, a_{final}, b_{final})$. Robust error handling is included for division by zero in the false position step, and the bracketing property is strictly maintained throughout.
 
 \begin{algorithm}[H]
 \caption{Optimized Trisection-False Position (Optimized\_TF)}
@@ -256,37 +241,19 @@ The trisection approach provides a theoretical advantage over bisection by poten
 \end{algorithmic}
 \end{algorithm}
 
+% --- Algorithm 4 ---
+
 \subsubsection{Algorithm 4: Optimized Trisection-False Position with Modified Secant (Optimized\_TFMS)}
 
-The Optimized Trisection-False Position with Modified Secant (Optimized\_TFMS) algorithm represents the most sophisticated of the four proposed hybrid methods, combining the aggressive interval reduction of trisection with the convergence acceleration of both false position and modified secant techniques. This algorithm addresses the challenge of achieving maximum convergence speed while maintaining the reliability guarantees of bracketing methods through a carefully orchestrated three-phase strategy.
+The Optimized Trisection-False Position with Modified Secant (Optimized\_TFMS) algorithm represents the most advanced of the four proposed methods, combining trisection, false position, and a modified secant step in a hierarchical three-phase strategy. The motivation is to achieve the fastest possible convergence while rigorously maintaining the bracketing property and numerical stability.
 
-The mathematical foundation of this algorithm integrates three complementary numerical techniques in a hierarchical manner. The first phase employs trisection to rapidly reduce the search interval by computing two interior points:
-
-\begin{equation}
-x_1 = a + \frac{b - a}{3} \quad \text{and} \quad x_2 = b - \frac{b - a}{3}
-\end{equation}
-
-This trisection phase provides the most aggressive interval reduction among all proposed algorithms, potentially reducing the interval size by a factor of 3 in a single iteration. The second phase applies the false position method to the identified subinterval, providing accelerated convergence through linear interpolation:
-
-\begin{equation}
-fp = \frac{a \cdot f(b) - b \cdot f(a)}{f(b) - f(a)}
-\end{equation}
-
-The third phase introduces a modified secant step for additional acceleration, using finite difference approximation:
-
+The algorithm begins with trisection to rapidly reduce the interval, followed by the false position method for interpolation-based acceleration. It then introduces a modified secant step, using finite difference approximation:
 \begin{equation}
 x_S = fp - \frac{\delta \cdot f(fp)}{f(fp + \delta) - f(fp)}
 \end{equation}
+where $fp$ is the false position estimate and $\delta = 10^{-4}$. The secant estimate $x_S$ is only accepted if it (1) lies within the current interval, (2) provides a better approximation than the false position step, and (3) is numerically stable. This multi-level validation ensures that the algorithm never sacrifices reliability for speed.
 
-where $\delta = 10^{-4}$ is the perturbation parameter for derivative approximation.
-
-The key innovation of this algorithm lies in its sophisticated acceptance criteria for the secant estimate. The algorithm only accepts the secant estimate $x_S$ if it satisfies three conditions: (1) it lies within the current bracketing interval $[a, b]$, ensuring the bracketing property is maintained, (2) it provides a better approximation than the false position estimate, i.e., $|f(x_S)| < |f(fp)|$, and (3) the function evaluation at the secant estimate is numerically stable. This multi-level validation ensures that the algorithm never sacrifices reliability for speed.
-
-The advantages of this three-phase approach are substantial. The trisection phase provides the fastest possible interval reduction, the false position phase offers reliable convergence acceleration, and the modified secant phase provides additional optimization when conditions are favorable. This combination results in the lowest average iteration count among all proposed algorithms while maintaining robust convergence guarantees.
-
-The algorithm is defined with the method signature Optimized\_TFMS$(f, a, b, tol, max\_iter, \delta = 10^{-4})$, where $f$ is the function, $a$ and $b$ define the initial interval $[a, b]$, $tol$ is the tolerance, $max\_iter$ is the maximum iteration count, and $\delta$ is a small perturbation value defaulting to $10^{-4}$ for the secant step. It returns $(n, x, f_x, a_{final}, b_{final})$, with $n$ as the iteration count, $x$ as the root approximation, $f_x$ as the function value at $x$, and $a_{final}$ and $b_{final}$ as the final interval bounds.
-
-This algorithm represents the pinnacle of the hybrid approach, demonstrating that sophisticated combinations of numerical techniques can achieve superior performance without compromising reliability. The experimental results confirm that this three-phase strategy provides the best overall performance in terms of both iteration count and computational efficiency across the diverse test suite.
+The three-phase approach—trisection, false position, and modified secant—enables the algorithm to adaptively exploit the most effective strategy at each stage, resulting in the lowest average iteration count and CPU time among all proposed algorithms. The method signature is Optimized\_TFMS$(f, a, b, tol, max\_iter, \delta = 10^{-4})$, returning $(n, x, f_x, a_{final}, b_{final})$. Experimental results confirm the superior performance of this approach across a diverse test suite.
 
 \begin{algorithm}[H]
 \caption{Optimized Trisection-False Position with Modified Secant (Optimized\_TFMS)}
